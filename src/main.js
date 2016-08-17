@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { domain, fromNow } from './filters'
 import App from './components/App.vue'
-import NewsView from './components/NewsView.vue'
+import HomeView from './components/HomeView.vue'
 
 // install router
 Vue.use(Router)
@@ -15,8 +15,8 @@ Vue.filter('domain', domain)
 var router = new Router()
 
 router.map({
-  '/news/:page': {
-    component: NewsView
+  '/': {
+    component: HomeView
   }
 })
 
@@ -25,7 +25,7 @@ router.beforeEach(function () {
 })
 
 router.redirect({
-  '*': '/news/1'
+  '*': '/'
 })
 
 router.start(App, '#app')
