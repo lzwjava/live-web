@@ -1,9 +1,11 @@
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    index:['./src/main.js']
+  },
   output: {
-    path: './static',
+    path: '/static/',
     publicPath: '/static/',
     filename: 'build.js'
   },
@@ -27,7 +29,13 @@ module.exports = {
   babel: {
     presets: ['es2015'],
     plugins: ['transform-runtime']
-  }
+  },
+  plugins: [
+
+  ],
+  debug: true,
+  displayErrorDetails: true,
+  outputPathinfo: true
 }
 
 if (process.env.NODE_ENV === 'production') {
