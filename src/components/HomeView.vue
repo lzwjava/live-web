@@ -8,15 +8,11 @@
 
 <script>
 
-import store from '../store'
 import util from '../common/util'
 
 var debug = require('debug')('HomeView');
 
 export default {
-
-  name: 'HomeView',
-
   components: {
   },
 
@@ -29,7 +25,7 @@ export default {
   route: {
     data ({ to }) {
       const page = +to.params.page
-      document.title = 'Vue.js HN Clone'
+      document.title = '趣直播'
     }
   },
 
@@ -47,11 +43,12 @@ export default {
         'code': this.code
       }).then((res) => {
         if (util.filterError(this, res)) {
-          if (res.data.scanned) {
+          if (res.data.result.scanned == false) {
             // scanned
+            window.location.href = '#/edit'
           } else {
             // not scanned
-            poll()
+            this.poll()
           }
         }
       })

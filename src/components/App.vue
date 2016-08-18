@@ -2,8 +2,7 @@
   <div id="wrapper">
     <!-- header -->
     <div id="header">
-      <a id="yc" href="http://www.ycombinator.com">
-        <img src="https://news.ycombinator.com/y18.gif">
+      <a id="yc" href="http://www.ycombinator.com">      
       </a>
       <h1><a href="#/">Hacker News</a></h1>
       <span class="source">

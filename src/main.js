@@ -5,6 +5,7 @@ import Ajax from 'vue-resource'
 import { domain, fromNow } from './filters'
 import App from './components/App.vue'
 import HomeView from './components/HomeView.vue'
+import EditView from './components/EditView.vue'
 
 // install router
 Vue.use(Router)
@@ -21,10 +22,11 @@ Vue.http.options.emulateJSON = true;
 Vue.http.options.timeout = 1000 * 15;
 
 console.log('env ' + process.env.NODE_ENV)
+
 if (process.env.NODE_ENV === 'production') {
   localStorage.debug = ''
 } else {
-  localStorage.debug = 'HomeView';
+  localStorage.debug = 'HomeView,EditView';
 }
 
 // routing
@@ -33,6 +35,9 @@ var router = new Router()
 router.map({
   '/': {
     component: HomeView
+  },
+  '/edit' : {
+    component: EditView
   }
 })
 
