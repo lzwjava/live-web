@@ -23,7 +23,10 @@ module.exports = {
         // for normal use cases only node_modules is needed.
         exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
         loader: 'babel'
-      }
+      },
+      { test: /\.css$/,
+        loader: "style-loader!css-loader"
+      }      
     ]
   },
   babel: {

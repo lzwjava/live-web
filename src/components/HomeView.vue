@@ -1,7 +1,7 @@
 <template>
 
   <div class="">
-    <img src="http://localhost:3005/qrcodes/gen?code=quzhibo-HRkulq9GrCfZWufgKZRwk7oy4bmD2LCv" alt="" />
+    <img :src="'http://api.hotimg.cn/qrcodes/gen?code=' + code" alt="" />
   </div>
 
 </template>
@@ -21,7 +21,8 @@ export default {
       code: ''
     }
   },
-
+  computed: {
+  },
   route: {
     data ({ to }) {
       const page = +to.params.page
@@ -43,7 +44,7 @@ export default {
         'code': this.code
       }).then((res) => {
         if (util.filterError(this, res)) {
-          if (res.data.result.scanned == false) {
+          if (res.data.result.scanned) {
             // scanned
             window.location.href = '#/edit'
           } else {

@@ -2,7 +2,7 @@
   <div id="wrapper">
     <!-- header -->
     <div id="header">
-      <a id="yc" href="http://www.ycombinator.com">      
+      <a id="yc" href="http://www.ycombinator.com">
       </a>
       <h1><a href="#/">Hacker News</a></h1>
       <span class="source">

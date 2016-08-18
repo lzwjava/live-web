@@ -8,3 +8,13 @@ exports.filterError = (component, res) => {
     return true;
   }
 };
+
+exports.escape = (html) => {
+  html = html || '';
+  return html
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+};
