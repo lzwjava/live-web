@@ -18,3 +18,11 @@ exports.escape = (html) => {
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#39;');
 };
+
+
+exports.httpErrorFn = (component) => {
+  return function (res) {
+    //component.$root.$children[0].show('error', res.statusText);
+    console.log(res.statusText)
+  }
+};
