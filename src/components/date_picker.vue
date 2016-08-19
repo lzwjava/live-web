@@ -19,10 +19,10 @@
         <!-- <span class="key">秒种</span> <input type="range" max="{{maxSecond}}" min="{{minSecond}}" step="1" v-model="secondPicked"></input>
         <br /> -->
         <div class="divider"></div>
-        <button v-on:click="setNow" v-show="allowNow">Now</button>
-        <button v-on:click="setDate(date)">Done</button>
+        <button v-on:click="setNow" v-show="allowNow">当前时间</button>
+        <button v-on:click="setDate(date)">完成</button>
         <div class="divider"></div>
-        <button class="close-btn" v-on:click="hidePicker">Cancel</button>
+        <button class="close-btn" v-on:click="hidePicker">取消</button>
     </div>
 </template>
 
@@ -94,6 +94,11 @@
                 return hour + ':' + minute + ':' + second;
             }
         },
+        created() {
+          if (this.dateResult == '') {
+            this.setNow()
+          }
+        },
         methods: {
             addZero (val) {
                 val = Number(val);
@@ -139,7 +144,7 @@
                 let _datePicked = now.getFullYear() + '-' + this.addZero(now.getMonth() + 1) + '-' + this.addZero(now.getDate());
                 let _hourPicked = this.addZero(now.getHours());
                 let _minutePicked = this.addZero(now.getMinutes());
-                let _secondPicked = this.addZero(now.getSeconds());
+                let _secondPicked = 0;
 
                 if (this.ifOutOfRange(_datePicked, _hourPicked, _minutePicked, _secondPicked)) {
                     alert('Out of range !');

@@ -32,7 +32,7 @@
         <div class="row">
           <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
           <div class="edit-area">
-              <markdown-area class="form-field form-content yue" :content.sync="content" placeholder="请输入直播详情" @submit="submitReview" required></markdown-area>
+              <markdown-area class="form-field form-content" :content.sync="content" placeholder="请输入直播详情" @submit="submitReview" required></markdown-area>
               <p class="tip">支持 Markdown</p>
           </div>
         </div>
@@ -102,8 +102,8 @@ export default {
   .write-container
     flex 3
     background-color #f5f5f5
-    padding-left 10px
-    padding-right 10px
+    padding-left 30px
+    padding-right 30px
     .row
       margin 10px 0
       .hint
@@ -137,7 +137,6 @@ export default {
           font-size 16px
           opacity 0.8
           padding 10px
-          max-width 597px
           &:focus
             border 1px solid #1CB2EF
 

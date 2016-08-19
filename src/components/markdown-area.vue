@@ -8,7 +8,7 @@
 <!--       <a href="#" @click="image" v-show="!uploading">Image</a> -->
       <a href="#" @click="preview">预览模式</a>
     </div>
-    <div class="markdown-actions2" v-show="showPreview">
+    <div class="markdown-actions" v-show="showPreview">
       <a href="#" @click="focus">编辑模式</a>
     </div>
 <!--     <input type="file" style="opacity: 0; left: -99999px; position: absolute" v-el:file accept="image/*" @change="upload">
@@ -81,10 +81,10 @@
 </script>
 
 <style lang="stylus">
+
 .markdown-area
   position relative
-  padding-top 1em
-  margin-top: -31px;
+  padding-top 1em  
   .markdown-preview
     margin-top 15px
     margin-bottom 15px
@@ -93,15 +93,10 @@
     top -1px
     right 0
     opacity 0.6
-    line-height 1
-  .markdown-actions2
-    position absolute
-    top -1px
-    right 0
-    opacity 0.6
-    line-height 1
+    line-height 10px
     a
       color #666
       font-size 16px
       text-transform uppercase
+
 </style>
