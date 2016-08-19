@@ -172,32 +172,35 @@
     };
 </script>
 
-<style scoped>
-    .v-date-picker-result {
-        text-align: center;
-    }
-    .v-date-picker-input {
-        position: absolute;
-        padding: 5px;
-        text-align: center;
-        background-color: #F5F5F5;
-        width: 220px;
-        z-index: 1;
+<style scoped lang="stylus">
 
-    }
-    .v-date-picker-input .divider {
-        border-top: 1px solid rgba(34,36,38,.15);
-        border-bottom: 1px solid rgba(255,255,255,.1);
-        margin: 10px 0;
-    }
-    .v-date-picker-input .key {
-        color: #FFFFFF;
-        background-color: #807F7F;
-        display: inline-block;
-        width: 60px;
-        text-align: center;
-    }
-    .v-date-picker-input .close-btn {
-        width: 100%;
-    }
+.v-date-picker-result
+  text-align center
+
+.v-date-picker-input
+  position absolute
+  padding 5px
+  text-align center
+  background-color #F5F5F5
+  width 220px
+  z-index 1
+  .divider
+    border-top 1px solid rgba(34,36,38,.15)
+    border-bottom 1px solid rgba(255,255,255,.1)
+    margin 10px 0
+  .key
+    color #FFFFFF
+    background-color #807F7F
+    display inline-block
+    width 60px
+    text-align center
+  .close-btn
+    width 100%
+  button
+    background-color #9B9B9B
+    border-radius 3px
+    color #fff
+    &:hover
+      background-color #505050
+
 </style>

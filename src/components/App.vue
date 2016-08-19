@@ -21,7 +21,8 @@
 </template>
 
 <style lang="stylus">
-@import "../variables.styl"
+@import "../stylus/variables.styl"
+@import "../stylus/base.styl"
 
 html, body
   font-family Verdana

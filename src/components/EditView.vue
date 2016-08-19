@@ -32,14 +32,14 @@
         <div class="row">
           <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
           <div class="edit-area">
-              <markdown-area class="form-field form-content" :content.sync="content" placeholder="请输入直播详情" @submit="submitReview" required></markdown-area>
+              <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="submitReview" required></markdown-area>
               <p class="tip">支持 Markdown</p>
           </div>
         </div>
 
-        <div class="row">
-          <button>保存</button>
-          <button>发布</button>
+        <div class="row row-action">
+          <button class="btn btn-blue">保存</button>
+          <button class="btn btn-blue">发布</button>
         </div>
 
       </form>
@@ -101,9 +101,12 @@ export default {
     background-color #403a3a
   .write-container
     flex 3
-    background-color #f5f5f5
-    padding-left 30px
-    padding-right 30px
+    background-color #fff
+    margin 0 30px
+    padding 10px
+    border 1px solid rgba(0,0,0,0.15)
+    box-shadow 0px 1px 0px rgba(255,255,255,0.15) inset, 0px 1px 2px rgba(0,0,0,0.15)
+    -webkit-box-shadow 0px 1px 0px rgba(255,255,255,0.15) inset, 0px 1px 2px rgba(0,0,0,0.15)
     .row
       margin 10px 0
       .hint
@@ -127,7 +130,12 @@ export default {
         width 80px
       .input-title
         width 300px
+    .row-action
+        text-align center
+        button
+          width 150px
     .edit-area
+      width 600px
       textarea
           width 100%
           height 200px
@@ -139,5 +147,8 @@ export default {
           padding 10px
           &:focus
             border 1px solid #1CB2EF
-
+      p.tip
+        color rgba(40,47,49,.6)
+        font-size 13px
+        margin 8px 0px
 </style>
