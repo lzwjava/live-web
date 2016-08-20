@@ -1,10 +1,6 @@
 <template>
   <div class="edit-view">
 
-    <div class="left-container">
-      <user-avatar :user="user"></user-avatar>
-    </div>
-
     <div class="write-container">
       <form>
         <div class="row">
@@ -136,16 +132,13 @@ export default {
 <style lang="stylus">
 
 .edit-view
-  display flex
-  flex-direction row
   justify-content center
-  .left-container
-    flex 1
-    background-color #403a3a
   .write-container
-    flex 3
+    width 50%
+    margin-left 25%
     background-color #fff
-    margin 0 30px
+    margin-top 0
+    margin-bottom 0
     padding 10px
     border 1px solid rgba(0,0,0,0.15)
     box-shadow 0px 1px 0px rgba(255,255,255,0.15) inset, 0px 1px 2px rgba(0,0,0,0.15)
@@ -178,7 +171,7 @@ export default {
         button
           width 150px
     .edit-area
-      width 600px
+      width 95%
       textarea
           width 100%
           height 200px
