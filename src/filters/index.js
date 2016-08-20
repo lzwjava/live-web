@@ -23,3 +23,11 @@ function pluralize(time, label) {
 
     return time + label + 's';
 }
+
+exports.moneyAsYuan = (money) => {
+  if (!money) {
+    return 0;
+  } else {
+    return money / 100;
+  }
+}

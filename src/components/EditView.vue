@@ -38,8 +38,8 @@
         </div>
 
         <div class="row row-action">
-          <button class="btn btn-blue">保存</button>
-          <button class="btn btn-blue">发布</button>
+          <button class="btn btn-blue" @click="saveLive">保存</button>
+          <button class="btn btn-blue" @click="publishLive">发布</button>
         </div>
 
       </form>
@@ -64,6 +64,7 @@ export default {
   },
   data() {
     return {
+      live: {},
       content: '',
       title: '',
       user: {},
@@ -74,6 +75,7 @@ export default {
   created() {
     debug('EditView created')
     this.fetchUser()
+    this.fetchLive()
   },
   methods: {
     submitReview() {
@@ -84,6 +86,47 @@ export default {
 					debug(res.data.result)
 				}
 			}, util.httpErrorFn(this))
+    },
+    fetchLive() {
+      this.$http.get('lives/lastPrepare').then((res) => {
+        if (util.filterError(this, res)) {
+          this.setLive(res.data.result)
+        }
+      }, util.httpErrorFn(this))
+    },
+    setLive(live) {
+      this.live = live
+      this.title = live.subject
+      this.amount = live.amount
+      this.content = live.detail
+      this.myDate = live.planTs
+    },
+    saveLive() {
+      var data = {};
+      if (this.title) {
+        data.subject = this.title
+      }
+      if (this.amount) {
+        data.amount = this.amount * 100
+      }
+      if (this.myDate) {
+        data.planTs = this.myDate
+      }
+      if (this.content) {
+        data.detail = this.content
+      }
+      this.$http.post('lives/' + this.live.liveId, data).then((res) => {
+        if (util.filterError(this, res)) {
+          debug('save succeed')
+        }
+      }, util.httpErrorFn(this))
+    },
+    publishLive() {
+      this.$http.get('lives/' + this.live.liveId).then((res) => {
+        if (util.filterError(this, res)) {
+          debug('publish succeed')
+        }
+      }, util.httpErrorFn(this))
     }
   }
 }

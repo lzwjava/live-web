@@ -16,11 +16,11 @@ var rewriteUrl = function(replacePath) {
         var queryIndex = req.url.indexOf('?');
         var query = queryIndex >= 0 ? req.url.substr(queryIndex) : "";
         req.url = req.path.replace(opt.path, replacePath) + query;
-        console.log("rewriting ", req.originalUrl, req.url);
+        console.log("rewriting ", req.originalUrl, req.url, req.hostname);
     };
 };
 
-var prod = false;
+var prod = true;
 var target;
 if (prod) {
   target = "http://api.hotimg.cn";
@@ -35,11 +35,15 @@ var proxy = [{
 }];
 
 var app = new WebpackDevServer(webpack(config), {
+  // allow access over local network
+  host: '0.0.0.0',
   publicPath: config.output.publicPath,
   historyApiFallback: true,
   proxy: proxy,
   hot: true,
-  debug: true
+  debug: true,
+  // suppress useless text
+  noInfo: true
 });
 
 app.listen(9090, '0.0.0.0', function (err, result) {

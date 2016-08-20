@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Ajax from 'vue-resource'
 
-import { domain, fromNow } from './filters'
+import filters from './filters'
 import App from './components/App.vue'
 import HomeView from './components/HomeView.vue'
 import EditView from './components/EditView.vue'
@@ -11,8 +11,10 @@ import EditView from './components/EditView.vue'
 Vue.use(Router)
 
 // register filters globally
-Vue.filter('fromNow', fromNow)
-Vue.filter('domain', domain)
+
+for(let  k in filters){
+    Vue.filter(k, filters[k])
+}
 
 // http
 Vue.config.debug = true;
