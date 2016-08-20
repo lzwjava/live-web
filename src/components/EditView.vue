@@ -151,4 +151,5 @@ export default {
         color rgba(40,47,49,.6)
         font-size 13px
         margin 8px 0px
+
 </style>
