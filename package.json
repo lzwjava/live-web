@@ -40,6 +40,7 @@
     "github-markdown-css": "^2.4.0",
     "highlight.js": "^9.6.0",
     "marked": "^0.3.6",
+    "qiniu-js": "^1.0.14-beta",    
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "vue": "^1.0.26",

@@ -30,6 +30,10 @@ module.exports = {
       {
         test: /\.(png|jpg|gif)$/,
         loader: 'url-loader?limit=8190'
+      },
+      {
+        test: /plupload\/js\/moxie\.js/,
+        loader: 'exports?this.mOxie'
       }
     ]
   },
@@ -38,7 +42,9 @@ module.exports = {
     plugins: ['transform-runtime']
   },
   plugins: [
-
+    new webpack.ProvidePlugin({
+          mOxie: 'moxie'
+    })
   ],
   debug: true,
   displayErrorDetails: true,
