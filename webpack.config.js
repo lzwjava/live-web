@@ -1,4 +1,7 @@
 var webpack = require('webpack')
+var path = require('path');
+
+var srcPath = path.join(__dirname, 'src');
 
 module.exports = {
   entry: {
@@ -8,6 +11,15 @@ module.exports = {
     path: '/static/',
     publicPath: '/static/',
     filename: 'build.js'
+  },
+  resolve: {
+    alias: {
+          moxie: path.join(__dirname, 'plupload/js/moxie.js'),
+          'plupload': path.join(__dirname, 'plupload/js/plupload.dev.js')
+    },
+    root: srcPath,
+    extensions: ['', '.js', '.css'],
+    modulesDirectories: ['node_modules','plupload', srcPath]
   },
   module: {
     // avoid webpack trying to shim process
@@ -21,7 +33,7 @@ module.exports = {
         test: /\.js$/,
         // excluding some local linked packages.
         // for normal use cases only node_modules is needed.
-        exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
+        exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\/|plupload/,
         loader: 'babel'
       },
       { test: /\.css$/,
