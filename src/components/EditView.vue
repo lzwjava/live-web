@@ -3,9 +3,12 @@
 
     <div class="write-container">
       <form>
-        <div class="row">
+        <div class="row" id="upload-container">
           <span class="hint">请上传封面</span>
-          <button class="upload-btn">本地上传</button>
+          <button class="upload-btn" id="pickfiles">本地上传</button>
+          <div v-if="coverUrl">
+            <img class="cover" :src="coverUrl"/>
+          </div>
         </div>
 
         <div class="row">
@@ -69,13 +72,17 @@ export default {
       title: '',
       user: {},
       amount: 0,
-      myDate: ''
+      myDate: '',
+      coverUrl: ''
     }
   },
   created() {
     debug('EditView created')
     this.fetchUser()
     this.fetchLive()
+  },
+  ready() {
+    this.initQiniu()
   },
   methods: {
     submitReview() {
@@ -90,6 +97,7 @@ export default {
     fetchLive() {
       this.$http.get('lives/lastPrepare').then((res) => {
         if (util.filterError(this, res)) {
+          debug('live: %j', res.data.result)
           this.setLive(res.data.result)
         }
       }, util.httpErrorFn(this))
@@ -97,9 +105,10 @@ export default {
     setLive(live) {
       this.live = live
       this.title = live.subject
-      this.amount = live.amount
+      this.amount = live.amount / 100
       this.content = live.detail
       this.myDate = live.planTs
+      this.coverUrl = live.coverUrl
     },
     saveLive() {
       var data = {};
@@ -115,9 +124,13 @@ export default {
       if (this.content) {
         data.detail = this.content
       }
+      if (this.coverUrl) {
+        data.coverUrl = this.coverUrl
+      }
+      debug('save data: %j', data)
       this.$http.post('lives/' + this.live.liveId, data).then((res) => {
         if (util.filterError(this, res)) {
-          debug('save succeed')
+          this.fetchLive()
         }
       }, util.httpErrorFn(this))
     },
@@ -128,13 +141,19 @@ export default {
         }
       }, util.httpErrorFn(this))
     },
+    updateCover(url) {
+      this.coverUrl = url
+      this.saveLive()
+    },
     initQiniu() {
       var component = this;
 			this.$http.get('files/uptoken').then((res) => {
 				if (util.filterError(this, res)) {
 					debug('qiniu token %j', res.data);
-					var uptoken = res.data.result.uptoken;
-					var bucketUrl = res.data.result.bucketUrl;
+          var result = res.data.result;
+					var uptoken = result.uptoken;
+					var bucketUrl = result.bucketUrl;
+          var key =result.key;
 					var uploader = Qiniu.uploader({
 					    runtimes: 'html5,flash,html4',    //上传模式,依次退化
 					    browse_button: 'pickfiles',       //上传选择的点选按钮，**必需**
@@ -142,7 +161,8 @@ export default {
 					    uptoken: uptoken,
 					    domain: bucketUrl,
 					    flash_swf_url: 'js/plupload/Moxie.swf',
-					    unique_names: true,
+					    unique_names: false,
+              save_key: false,
 					    get_new_uptoken: false,           //设置上传文件的时候是否每次都重新获取新的token
 					    container: 'upload-container',    //上传区域DOM ID，默认是browser_button的父元素，
 					    max_file_size: '100mb',           //最大文件体积限制
@@ -172,6 +192,7 @@ export default {
 					               }
 					               var sourceLink = domain + res.key;
 					               debug('sourceLink: %j', sourceLink);
+                         component.updateCover(sourceLink)
                          // update
 					              //  component.avatarUrl = sourceLink;
 					              //  component.updateUser(null, () => {
@@ -188,8 +209,7 @@ export default {
 					        'Key': function(up, file) {
 					            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
 					            // 该配置必须要在 unique_names: false , save_key: false 时才生效
-					            var key = "";
-					            return key
+					            return result.key;
 					        }
 					    }
 					});
@@ -259,5 +279,9 @@ export default {
         color rgba(40,47,49,.6)
         font-size 13px
         margin 8px 0px
+    #upload-container
+      img
+        width 200px
+        margin-top 10px        
 
 </style>
