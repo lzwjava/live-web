@@ -24,6 +24,7 @@ marked.setOptions({
     return highlight.highlightAuto(code).value;
   }
 });
+
 export default {
     props: ['content', 'show'],  // show 参数，为了避免当 content 改变就调用 marked
     computed: {

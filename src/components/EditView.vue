@@ -31,7 +31,7 @@
         <div class="row">
           <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
           <div class="edit-area">
-              <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="submitReview" required></markdown-area>
+              <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="saveLive" required></markdown-area>
               <p class="tip">支持 Markdown</p>
           </div>
         </div>
@@ -78,6 +78,7 @@ export default {
   },
   created() {
     debug('EditView created')
+    debug('this parent' + this.$parent)
     this.fetchUser()
     this.fetchLive()
   },
@@ -85,8 +86,6 @@ export default {
     this.initQiniu()
   },
   methods: {
-    submitReview() {
-    },
     fetchUser() {
       this.$http.get('self').then((res) => {
         if (util.filterError(this, res)) {
@@ -185,20 +184,9 @@ export default {
                          //    "key": "gogopher.jpg"
                          //  }
                          var res = JSON.parse(info);
-                         var domain = up.getOption('domain');
-                         // 从第10个找，跳过之前的 http:// ，看看是不是 / 结尾
-                         if (domain.indexOf('/', 10) == -1) {
-                             domain += '/';
-                         }
-                         var sourceLink = domain + res.key;
+                         var sourceLink = bucketUrl + '/' + res.key;
                          debug('sourceLink: %j', sourceLink);
                          component.updateCover(sourceLink)
-                         // update
-                        //  component.avatarUrl = sourceLink;
-                        //  component.updateUser(null, () => {
-                        //      // todo，component 没有进行更新的问题
-                        //      window.location = '/setting.html';
-                        //  });
                   },
                   'Error': function(up, err, errTip) {
                          debug('qiniu error %j errTip %j', err, errTip);

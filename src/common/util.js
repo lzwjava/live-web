@@ -1,8 +1,7 @@
 exports.filterError = (component, res) => {
   if (res.data.status != "success") {
     console.log('error:' + res.data.error)
-    // var nav = component.$root.$children[0];
-    // nav.show('error', res.data.error);
+    component.$dispatch('show-msg', 'error', res.data.error)
     return false;
   } else {
     return true;
@@ -22,7 +21,6 @@ exports.escape = (html) => {
 
 exports.httpErrorFn = (component) => {
   return function (res) {
-    //component.$root.$children[0].show('error', res.statusText);
-    console.log(res.statusText)
+    component.$dispatch('show-msg', 'error', res.statusText)
   }
 };

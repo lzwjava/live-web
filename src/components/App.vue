@@ -17,6 +17,7 @@
 import Nav from '../components/nav.vue'
 
 export default {
+  name: 'App',
   components: {
     'my-nav': Nav
   },

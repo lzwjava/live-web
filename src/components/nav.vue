@@ -19,12 +19,38 @@
 
     </div>
   </nav>
-  <div id="message" aria-live="assertive">
-    <div class="message message-{{msg.type}}" v-for="msg in messages" v-text="msg.text" transition="fade"></div>
-  </div>
+
+  <tip v-el:msg-tip><tip>
 </template>
 
 <script type="text/javascript">
+
+import Tip from './tip.vue'
+var debug = require('debug')('nav')
+
+export default {
+  components: {
+    'tip': Tip
+  },
+  data () {
+    return {
+    }
+  },
+  computed: {
+  },
+  methods: {
+  },
+  created() {
+
+  },
+  ready() {
+  },
+  events: {
+    'show-msg': function (type, message) {
+      this.$broadcast('show-tip-msg', type, message)
+    }
+  }
+}
 
 </script>
 
@@ -73,36 +99,5 @@
         font-weight 600
       &.hover-btn:hover
         color blue
-
-#message
-  position fixed
-  top 0
-  left 0
-  width 100%
-  text-align center
-  z-index 99999
-
-.message
-  font-size 1rem
-  line-height 1.8
-  padding 10px 20px
-  box-sizing border-box
-  border-bottom 1px solid #efefef
-  background-color rgba(255, 255, 255, 0.9)
-  color #565656
-
-.message-success
-  background-color rgba(66, 185, 131, 0.9)
-  border-color rgb(66, 185, 131)
-  color white
-
-.message-error
-  background-color rgba(255, 68, 68, 0.9)
-  border-color rgb(255, 68, 68)
-  color white
-
-.message-warn
-  background-color rgba(255, 220, 0, 0.9)
-  border-color rgb(255, 220, 0)
 
 </style>
