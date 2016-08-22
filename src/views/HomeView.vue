@@ -13,6 +13,7 @@ import util from '../common/util'
 var debug = require('debug')('HomeView');
 
 export default {
+  name: 'HomeView',
   components: {
   },
 

@@ -25,10 +25,11 @@
 
 <script type="text/javascript">
 
-import Tip from './tip.vue'
+import Tip from '../components/tip.vue'
 var debug = require('debug')('nav')
 
 export default {
+  name: 'Nav',
   components: {
     'tip': Tip
   },
@@ -46,9 +47,6 @@ export default {
   ready() {
   },
   events: {
-    'show-msg': function (type, message) {
-      this.$broadcast('show-tip-msg', type, message)
-    }
   }
 }
 

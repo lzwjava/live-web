@@ -1,48 +1,51 @@
 <template>
   <div class="edit-view">
 
-    <div class="write-container">
-      <form>
-        <div class="row" id="upload-container">
-          <span class="hint">请上传封面</span>
-          <button class="upload-btn" id="pickfiles">本地上传</button>
-          <div v-if="coverUrl">
-            <img class="cover" :src="coverUrl"/>
+    <loading>
+      <div class="write-container">
+        <form>
+          <div class="row" id="upload-container">
+            <span class="hint">请上传封面</span>
+            <button class="upload-btn" id="pickfiles">本地上传</button>
+            <div v-if="coverUrl">
+              <img class="cover" :src="coverUrl"/>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <span class="hint">请设定直播门票</span>
-          <input type="number" v-model="amount" class="input-amount"> <span class="suffix">¥<span>
-        </div>
-
-        <div class="row">
-          <span class="hint">请输入直播标题</span>
-          <input type="text" v-model="title" class="input-title">
-        </div>
-
-        <div class="row">
-          <span class="hint">请设定直播时间</span>
-          <div>
-            <v-date-picker :date-result.sync="myDate"></v-date-picker>
+          <div class="row">
+            <span class="hint">请设定直播门票</span>
+            <input type="number" v-model="amount" class="input-amount"> <span class="suffix">¥<span>
           </div>
-        </div>
 
-        <div class="row">
-          <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
-          <div class="edit-area">
-              <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="saveLive" required></markdown-area>
-              <p class="tip">支持 Markdown</p>
+          <div class="row">
+            <span class="hint">请输入直播标题</span>
+            <input type="text" v-model="title" class="input-title">
           </div>
-        </div>
 
-        <div class="row row-action">
-          <button class="btn btn-blue" @click="saveLive">保存</button>
-          <button class="btn btn-blue" @click="publishLive">发布</button>
-        </div>
+          <div class="row">
+            <span class="hint">请设定直播时间</span>
+            <div>
+              <v-date-picker :date-result.sync="myDate"></v-date-picker>
+            </div>
+          </div>
 
-      </form>
-    </div>
+          <div class="row">
+            <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
+            <div class="edit-area">
+                <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="saveLive" required></markdown-area>
+                <p class="tip">支持 Markdown</p>
+            </div>
+          </div>
+
+          <div class="row row-action">
+            <button class="btn btn-blue" @click="saveLive">保存</button>
+            <button class="btn btn-blue" @click="publishLive">发布</button>
+          </div>
+
+        </form>
+      </div>
+    </loading>
+
   </div>
 </template>
 
@@ -52,6 +55,7 @@ import MarkdownArea from "../components/markdown-area.vue"
 import UserAvatar from "../components/user-avatar.vue"
 import util from '../common/util'
 import VDatePicker from '../components/date_picker.vue'
+import Loading from '../components/loading.vue'
 
 require('moxie');
 require('plupload'); // use for Qiniu js sdk
@@ -60,10 +64,12 @@ import Qiniu from 'qiniu-js-sdk'
 var debug = require('debug')('EditView');
 
 export default {
+  name: 'EditView',
   components: {
     'markdown-area': MarkdownArea,
     'user-avatar': UserAvatar,
-    'v-date-picker': VDatePicker
+    'v-date-picker': VDatePicker,
+    'loading': Loading
   },
   data() {
     return {
@@ -77,8 +83,6 @@ export default {
     }
   },
   created() {
-    debug('EditView created')
-    debug('this parent' + this.$parent)
     this.fetchUser()
     this.fetchLive()
   },
@@ -94,8 +98,10 @@ export default {
       }, util.httpErrorFn(this))
     },
     fetchLive() {
+      this.$broadcast('loading')
       this.$http.get('lives/lastPrepare').then((res) => {
         if (util.filterError(this, res)) {
+          this.$broadcast('loaded')
           debug('live: %j', res.data.result)
           this.setLive(res.data.result)
         }
@@ -123,26 +129,29 @@ export default {
       if (this.content) {
         data.detail = this.content
       }
-      if (this.coverUrl) {
-        data.coverUrl = this.coverUrl
-      }
-      debug('save data: %j', data)
+      this.saveLiveData(data)
+    },
+    saveLiveData(data) {
       this.$http.post('lives/' + this.live.liveId, data).then((res) => {
         if (util.filterError(this, res)) {
+          util.show(this, 'success', '保存成功')
           this.fetchLive()
         }
       }, util.httpErrorFn(this))
     },
     publishLive() {
-      this.$http.get('lives/' + this.live.liveId).then((res) => {
+      this.$http.get('lives/' + this.live.liveId + '/publish').then((res) => {
         if (util.filterError(this, res)) {
-          debug('publish succeed')
+          util.show(this, 'success', '发布成功')
         }
       }, util.httpErrorFn(this))
     },
     updateCover(url) {
       this.coverUrl = url
-      this.saveLive()
+      var data = {
+        coverUrl: this.coverUrl
+      }
+      this.saveLiveData(data)
     },
     initQiniu() {
       var component = this;
@@ -190,7 +199,7 @@ export default {
                   },
                   'Error': function(up, err, errTip) {
                          debug('qiniu error %j errTip %j', err, errTip);
-                         util.show(component, 'error', errTip);
+                         util.show(component, 'error', errTip)
                   },
                   'UploadComplete': function() {
                   },

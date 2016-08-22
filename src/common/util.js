@@ -18,9 +18,12 @@ exports.escape = (html) => {
   .replace(/'/g, '&#39;');
 };
 
-
 exports.httpErrorFn = (component) => {
   return function (res) {
     component.$dispatch('show-msg', 'error', res.statusText)
   }
+};
+
+exports.show = (component, type, text, duration) => {
+  component.$dispatch('show-msg', type, text)
 };

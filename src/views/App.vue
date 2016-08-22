@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-import Nav from '../components/nav.vue'
+import Nav from './nav.vue'
 
 export default {
   name: 'App',
@@ -23,6 +23,11 @@ export default {
   },
   data() {
     return {
+    }
+  },
+  events: {
+    'show-msg': function (type, message) {
+      this.$broadcast('show-tip-msg', type, message)
     }
   }
 }

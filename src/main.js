@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Ajax from 'vue-resource'
 
 import filters from './filters'
-import App from './components/App.vue'
-import HomeView from './components/HomeView.vue'
-import EditView from './components/EditView.vue'
+import App from './views/App.vue'
+import HomeView from './views/HomeView.vue'
+import EditView from './views/EditView.vue'
 
 // install router
 Vue.use(Router)
