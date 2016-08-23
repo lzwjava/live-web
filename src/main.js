@@ -21,7 +21,7 @@ Vue.config.debug = true;
 Vue.use(Ajax);
 Vue.http.options.root = '/api';
 Vue.http.options.emulateJSON = true;
-Vue.http.options.timeout = 1000 * 15;
+Vue.http.options.timeout = 1000 * 10;
 
 console.log('env ' + process.env.NODE_ENV)
 

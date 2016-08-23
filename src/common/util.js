@@ -20,7 +20,11 @@ exports.escape = (html) => {
 
 exports.httpErrorFn = (component) => {
   return function (res) {
-    component.$dispatch('show-msg', 'error', res.statusText)
+    var text = res.statusText
+    if (text == '') {
+      text = '网络超时错误'
+    }
+    component.$dispatch('show-msg', 'error', text)
   }
 };
 

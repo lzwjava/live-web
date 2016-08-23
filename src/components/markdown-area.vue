@@ -84,7 +84,7 @@
 
 .markdown-area
   position relative
-  padding-top 1em  
+  padding-top 1em
   .markdown-preview
     margin-top 15px
     margin-bottom 15px
