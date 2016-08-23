@@ -14,6 +14,19 @@
       <div class="right">
         <ul class="list">
           <a href="."><li class="hover-btn">首页</li></a>
+          <li v-if="userStatus">
+            <dropdown>
+              <div class="dropdown-anchor" slot="showText">
+                <user-avatar :user="user" @click="viewUserDropdown"></user-avatar>
+              </div>
+              <div slot="options">
+                  <user-avatar :user="user"></user-avatar>
+                  <div class="name">{{user.username}}</div>
+                  <div class="dropdown-divider"></div>
+                <a class="dropdown-item" @click="logout" href="/">注销</a>
+              </div>
+            </dropdown>
+          </li>
         </ul>
       </div>
 
@@ -26,27 +39,64 @@
 <script type="text/javascript">
 
 import Tip from '../components/tip.vue'
+import DropDown from '../components/dropdown.vue'
+import UserAvatar from '../components/user-avatar.vue'
+import util from '../common/util'
+
 var debug = require('debug')('nav')
 
 export default {
   name: 'Nav',
   components: {
-    'tip': Tip
+    'tip': Tip,
+    'dropdown': DropDown,
+    'user-avatar': UserAvatar
   },
   data () {
     return {
+      userStatus: false,
+      user: {}
     }
   },
   computed: {
   },
   methods: {
+    viewUserDropdown (e) {
+        e && e.preventDefault();
+        this.showUserDropdown = true;
+    },
+    logout (e) {
+      e && e.preventDefault();
+      this.$http.get('logout').then((resp) => {
+        this.user = {};
+        this.userStatus = false;
+        window.localStorage.removeItem('user');
+        window.location = '/';
+      }, util.httpErrorFn(this));
+    },
+    loadUser() {
+      if(window.localStorage.getItem('user')){
+        this.userStatus = true;
+        this.user = JSON.parse(window.localStorage.getItem('user'));
+      }
+    }
   },
   created() {
-
+    this.loadUser()
   },
   ready() {
   },
   events: {
+    'updateNavUser': function (user) {
+      if (user && user.username) {
+        // 防止不合法的数据破坏了
+        window.localStorage.setItem('user',JSON.stringify(user));
+      } else {
+        console.log('username is null in setting localStorage');
+      }
+      this.userStatus = true
+      this.user = user
+    }
   }
 }
 
@@ -92,10 +142,24 @@ export default {
       font-size 14px
       top -2px
       position relative
+      display inline-block
       &.hover-btn
         border 1px solid #ffff // 避免hover之后颤抖
         font-weight 600
       &.hover-btn:hover
         color blue
+        .dropdown-anchor
+          position relative
+      .dropdown-inner
+        width 220px
+        right 0
+        &:before,&:after
+          left 90%
+  .avatar
+    width totalHeight - 2 * paddingTop
+    height totalHeight - 2 * paddingTop
+    img
+      border-radius 50%
+      border 1px solid #8F9DA4
 
 </style>

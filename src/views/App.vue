@@ -28,7 +28,10 @@ export default {
   events: {
     'show-msg': function (type, message) {
       this.$broadcast('show-tip-msg', type, message)
-    }
+    },
+    'updateUser': function (user) {
+      this.$broadcast('updateNavUser', user)
+    },
   }
 }
 

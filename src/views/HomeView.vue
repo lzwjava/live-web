@@ -38,7 +38,6 @@ export default {
 
   destroyed () {
   },
-
   methods: {
     poll () {
       this.$http.get('qrcodes/scanned', {

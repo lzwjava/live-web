@@ -1,8 +1,8 @@
 <template>
-  <a v-el:avatar class="avatar" aria-label="View @{{user.username}} profile">
+  <div class="avatar">
     <img v-if="user.avatarUrl" :src="user.avatarUrl" :alt="user.username" :title="user.username" />
     <span v-if="!user.avatarUrl" style="{background-color: spanBgColor, color: spanColor}">{{user.username}}</span>
-  </a>
+  </div>
 </template>
 <script>
   var debug = require('debug')('avatar');
@@ -43,12 +43,6 @@
 .avatar
   display inline-block
   text-decoration none
-  &.small
-    width 36px
-    height 36px
-    line-height 36px
-    span
-      font-size 18px
   &:hover
     opacity 0.8
   img

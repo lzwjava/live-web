@@ -93,7 +93,8 @@ export default {
     fetchUser() {
       this.$http.get('self').then((res) => {
         if (util.filterError(this, res)) {
-          debug(res.data.result)
+          debug('user: %j', res.data.result)
+          this.$dispatch('updateUser', res.data.result)
         }
       }, util.httpErrorFn(this))
     },
