@@ -1,7 +1,7 @@
 <template>
 
-  <div class="">
-    <img :src="'http://api.hotimg.cn/qrcodes/gen?code=' + code" alt="" />
+  <div class="home-view">
+    <img class="absolute-center" :src="'http://api.hotimg.cn/qrcodes/gen?code=' + code" alt="" />
   </div>
 
 </template>
@@ -74,5 +74,12 @@ export default {
 </script>
 
 <style lang="stylus">
+
+@import "../stylus/base.styl"
+
+.home-view
+  min-height 500px
+  img
+    width 250px
 
 </style>
