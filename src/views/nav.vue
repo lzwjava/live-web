@@ -14,15 +14,18 @@
       <div class="right">
         <ul class="list">
           <a href="."><li class="hover-btn">首页</li></a>
+
           <li v-if="userStatus">
             <dropdown>
               <div class="dropdown-anchor" slot="showText">
                 <user-avatar :user="user" @click="viewUserDropdown"></user-avatar>
               </div>
               <div slot="options">
-                  <user-avatar :user="user"></user-avatar>
-                  <div class="name">{{user.username}}</div>
-                  <div class="dropdown-divider"></div>
+                <user-avatar :user="user"></user-avatar>
+                <div class="name">{{user.username}}</div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#/edit">编辑</a>
+                <div class="dropdown-divider"></div>
                 <a class="dropdown-item" @click="logout" href="/">注销</a>
               </div>
             </dropdown>
