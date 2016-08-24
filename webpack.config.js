@@ -8,7 +8,7 @@ module.exports = {
     index:['./src/main.js']
   },
   output: {
-    path: '/static/',
+    path: path.resolve(__dirname, 'static/'),
     publicPath: '/static/',
     filename: 'build.js'
   },
@@ -64,7 +64,7 @@ module.exports = {
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.plugins = [
+  module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
@@ -76,7 +76,7 @@ if (process.env.NODE_ENV === 'production') {
       }
     }),
     new webpack.optimize.OccurenceOrderPlugin()
-  ]
+  ])
 } else {
   module.exports.devtool = '#source-map'
 }
