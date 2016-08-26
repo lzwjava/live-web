@@ -23,7 +23,7 @@ var rewriteUrl = function(replacePath) {
 var prod = true;
 var target;
 if (prod) {
-  target = "http://api.hotimg.cn";
+  target = "http://api.quzhiboapp.com";
 } else {
   target = "http://localhost:3005";
 }

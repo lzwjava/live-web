@@ -1,7 +1,7 @@
 <template>
 
   <div class="home-view">
-    <img class="absolute-center" :src="'http://api.hotimg.cn/qrcodes/gen?code=' + code" alt="" />
+    <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
   </div>
 
 </template>
