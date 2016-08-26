@@ -92,8 +92,7 @@ export default {
   methods: {
     fetchUser() {
       this.$http.get('self').then((res) => {
-        if (util.filterError(this, res)) {
-          debug('user: %j', res.data.result)
+        if (util.filterError(this, res)) {          
           this.$dispatch('updateUser', res.data.result)
         }
       }, util.httpErrorFn(this))
@@ -103,7 +102,6 @@ export default {
       this.$http.get('lives/lastPrepare').then((res) => {
         if (util.filterError(this, res)) {
           this.$broadcast('loaded')
-          debug('live: %j', res.data.result)
           this.setLive(res.data.result)
         }
       }, util.httpErrorFn(this))
@@ -158,7 +156,6 @@ export default {
       var component = this;
       this.$http.get('files/uptoken').then((res) => {
         if (util.filterError(this, res)) {
-          debug('qiniu token %j', res.data);
           var result = res.data.result;
           var uptoken = result.uptoken;
           var bucketUrl = result.bucketUrl;

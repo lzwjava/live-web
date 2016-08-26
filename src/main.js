@@ -28,7 +28,7 @@ console.log('env ' + process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   localStorage.debug = ''
 } else {
-  localStorage.debug = 'HomeView,EditView,markdown-area,nav';
+  localStorage.debug = 'HomeView,EditView,markdown-area,nav,util';
 }
 
 // routing
