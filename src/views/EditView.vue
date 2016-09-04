@@ -4,6 +4,9 @@
     <loading>
       <div class="write-container">
         <form>
+          <div class="status">
+            {{statusText}}
+          </div>
           <div class="row" id="upload-container">
             <span class="hint">请上传封面</span>
             <button class="upload-btn" id="pickfiles">本地上传</button>
@@ -39,7 +42,7 @@
 
           <div class="row row-action">
             <button class="btn btn-blue" @click="saveLive">保存</button>
-            <button class="btn btn-blue" @click="publishLive">发布</button>
+            <button class="btn btn-blue" @click="publishLive">提交审核</button>
           </div>
 
         </form>
@@ -82,6 +85,23 @@ export default {
       coverUrl: ''
     }
   },
+  computed: {
+    statusText () {
+      switch (this.live.status) {
+        case 1:
+          return '编辑中';
+        case 5:
+          return '审核中';
+        case 10:
+          return '报名中';
+        case 20:
+          return '直播中';
+        case 30:
+          return '已结束';
+      }
+      return '未知';
+    }
+  },
   created() {
     this.fetchUser()
     this.fetchLive()
@@ -92,7 +112,7 @@ export default {
   methods: {
     fetchUser() {
       this.$http.get('self').then((res) => {
-        if (util.filterError(this, res)) {          
+        if (util.filterError(this, res)) {
           this.$dispatch('updateUser', res.data.result)
         }
       }, util.httpErrorFn(this))
@@ -139,9 +159,9 @@ export default {
       }, util.httpErrorFn(this))
     },
     publishLive() {
-      this.$http.get('lives/' + this.live.liveId + '/publish').then((res) => {
+      this.$http.get('lives/' + this.live.liveId + '/submitReview').then((res) => {
         if (util.filterError(this, res)) {
-          util.show(this, 'success', '发布成功')
+          util.show(this, 'success', '提交审核成功')
         }
       }, util.httpErrorFn(this))
     },
@@ -278,5 +298,10 @@ export default {
       img
         width 200px
         margin-top 10px
+    .status
+      border 1px solid #1CB2EF
+      border-radius 3px
+      padding 3px
+      float right
 
 </style>
