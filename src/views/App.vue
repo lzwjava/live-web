@@ -9,17 +9,21 @@
       transition
       transition-mode="out-in">
     </router-view>
+
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script type="text/javascript">
 
 import Nav from './nav.vue'
+import MyFooter from './footer.vue'
 
 export default {
   name: 'App',
   components: {
-    'my-nav': Nav
+    'my-nav': Nav,
+    'my-footer': MyFooter
   },
   data() {
     return {
@@ -43,12 +47,10 @@ export default {
 @import "../stylus/base.styl"
 
 #wrapper
-  position relative
   width 100%
-  min-height 80px
+  min-height 800px
 
 .view
-  position absolute
   width 100%
   transition opacity .2s ease
   box-sizing border-box

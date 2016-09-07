@@ -79,7 +79,7 @@ export default {
 @import "../stylus/base.styl"
 
 .home-view
-  min-height 500px
+  min-height 600px
   .big-word
     font-size 20px
     text-align center
