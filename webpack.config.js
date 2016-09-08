@@ -50,7 +50,9 @@ module.exports = {
     ]
   },
   babel: {
-    presets: ['es2015'],
+    presets: [
+      ["es2015", {"loose": true}]
+    ],
     plugins: ['transform-runtime']
   },
   plugins: [
