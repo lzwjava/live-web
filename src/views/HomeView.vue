@@ -1,7 +1,7 @@
 <template>
 
   <div class="home-view">
-    <div class="big-word">研发中，敬请期待…</div>
+    <div class="big-word">请扫描二维码登录电脑版</div>
     <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
   </div>
 
@@ -83,7 +83,7 @@ export default {
   .big-word
     font-size 20px
     text-align center
-    margin-top 30px
+    margin-top 80px
   img
     width 250px
 

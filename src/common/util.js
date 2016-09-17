@@ -2,7 +2,7 @@ var debug = require('debug')('util');
 
 exports.filterError = (component, res) => {
   debug('resp:%j', res.data)
-  if (res.data.status != "success") {    
+  if (res.data.status != "success") {
     component.$dispatch('show-msg', 'error', res.data.error)
     return false;
   } else {
@@ -33,3 +33,20 @@ exports.httpErrorFn = (component) => {
 exports.show = (component, type, text, duration) => {
   component.$dispatch('show-msg', type, text)
 };
+
+
+exports.statusText = (status) => {
+  switch (status) {
+    case 1:
+      return '编辑中';
+    case 5:
+      return '审核中';
+    case 10:
+      return '报名中';
+    case 20:
+      return '直播中';
+    case 30:
+      return '已结束';
+  }
+  return '未知';
+}

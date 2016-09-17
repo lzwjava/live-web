@@ -25,6 +25,7 @@
                 <div class="name">{{user.username}}</div>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#/edit">编辑</a>
+                <a class="dropdown-item" href="#/mylist">直播控制</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" @click="logout" href="/">注销</a>
               </div>
@@ -123,7 +124,7 @@ export default {
     height 100%
   .navbar-brand
     width 35px
-    top 3px
+    top 6px
     position relative
   .left
     float left

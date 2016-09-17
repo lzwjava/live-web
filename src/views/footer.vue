@@ -14,9 +14,9 @@
 	        <li>
 	          <div class="short">
 	            <h4 class="number">公司</h4>
-	            <p class="detail"><a target="_blank" href="./belief.html">关于我们</a></p><br>
+	            <!-- <p class="detail"><a target="_blank" href="./belief.html">关于我们</a></p><br> -->
 	            <p class="detail"><a @click="contactus">问题反馈</a></p><br>
-	            <p class="detail"> <a target="_blank" href="./statement.html">用户协议</a> </p>
+	            <!-- <p class="detail"> <a target="_blank" href="./statement.html">用户协议</a> </p> -->
 	          </div>
 	        </li>
 	        <div class="company">

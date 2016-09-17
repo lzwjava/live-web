@@ -1,6 +1,6 @@
 <template>
 	<section class="contact-us" @click="stop($event)">
-		<button type="button" class="cancel" @click="close"></button>
+		<button type="button" class="cancel" @click="close">X</button>
 		<h2>联系我们</h2>
 		<div class="form">
 			<div class="qrcode"></div>
@@ -51,6 +51,7 @@
 			height 20px
 			right 20px
 			top 20px
+			background #fff
 		p
 			font-size 0.8rem
 			text-align center
@@ -61,8 +62,8 @@
 			text-align center
 		.qrcode
 			width 320px
-			height 320px
-			background url("../img/QRCode@2x.png") no-repeat
+			height 400px
+			background url("../img/QRCode@2x.jpg") no-repeat
 			background-size contain
 			margin-top 10px
 			margin 0 auto
