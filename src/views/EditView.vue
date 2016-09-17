@@ -8,7 +8,7 @@
             {{statusText}}
           </div>
           <div class="row" id="upload-container">
-            <span class="hint">请上传封面</span>
+            <span class="hint">请上传封面(最佳尺寸 750x500)</span>
             <button class="upload-btn" id="pickfiles">本地上传</button>
             <div v-if="coverUrl">
               <img class="cover" :src="coverUrl"/>
