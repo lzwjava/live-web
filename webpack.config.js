@@ -1,16 +1,18 @@
 var webpack = require('webpack')
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 var srcPath = path.join(__dirname, 'src');
 
-module.exports = {
+var config = {
   entry: {
-    index:['./src/main.js']
+    main:['./src/main.js']
   },
   output: {
     path: path.resolve(__dirname, 'static/'),
-    publicPath: '/static/',
-    filename: 'build.js'
+    publicPath: '',
+    filename: '[name].js'
   },
   resolve: {
     alias: {
@@ -58,20 +60,39 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
           mOxie: 'moxie'
+    }),
+    new  HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: 'src/index.html'
     })
   ],
+  vue: {
+    loaders: {
+      js: 'babel'
+    }
+  },
   debug: true,
   displayErrorDetails: true,
   outputPathinfo: true
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.plugins = (module.exports.plugins || []).concat([
+  config.output.filename = '[name].[chunkhash].js'
+  config.output.chunkFilename = '[id].[chunkhash].js'
+  config.vue.loaders = {
+    js: 'babel',
+    css: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+    less: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader'),
+    sass: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader'),
+    stylus: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')
+  }
+  config.plugins = (config.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
+    new ExtractTextPlugin('[name].[contenthash].css'),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
@@ -80,5 +101,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.optimize.OccurenceOrderPlugin()
   ])
 } else {
-  module.exports.devtool = '#source-map'
+  config.devtool = '#source-map'
 }
+
+module.exports = config
