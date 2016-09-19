@@ -3,11 +3,19 @@
 
     <p class="status">当前直播状态:{{statusText}}</p>
 
-    <button class="btn btn-blue" @click="beginLive">开始直播</button>
+    <p>
+      请在 OBS 软件设置直播地址: {{live.rtmpUrl}}
+    </p>
 
-    <button class="btn btn-blue" @click="notifyLive">群发开播短信</button>
+    <div class="control-btn">
+      <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
-    <button class="btn btn-blue" @click="endLive">结束直播</button>
+      <button class="btn btn-blue" @click="notifyLive">群发开播短信</button>
+
+      <button class="btn btn-blue" @click="endLive">结束直播</button>
+    </div>
+
+
 
 
   </div>
@@ -63,13 +71,15 @@ export default {
         },util.httpErrorFn(this))
     },
     notifyLive() {
-      this.$http.get('lives/' + this.liveId +'/notify')
-        .then((res) => {
-          if (util.filterError(this, res)) {
-            var result = res.data.result
-            util.show(this, 'success', '发送短信结果: ' + result.succeedCount + '/' +result.total)
-          }
-        },util.httpErrorFn(this))
+      if (confirm('真的要群发通知短信吗?')) {
+        this.$http.get('lives/' + this.liveId +'/notify')
+          .then((res) => {
+            if (util.filterError(this, res)) {
+              var result = res.data.result
+              util.show(this, 'success', '发送短信结果: ' + result.succeedCount + '/' +result.total)
+            }
+          },util.httpErrorFn(this))
+      }
     }
   }
 }
@@ -84,6 +94,9 @@ export default {
   p.status
     font-size 24px
   button
-    margin-right 60px
+    margin-left 50px
+    margin-right 50px
+  .control-btn
+    margin-top 100px
 
 </style>
