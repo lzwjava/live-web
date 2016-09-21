@@ -142,7 +142,6 @@ export default {
       this.$http.post('lives/' + this.live.liveId, data).then((res) => {
         if (util.filterError(this, res)) {
           util.show(this, 'success', '保存成功')
-          this.fetchLive()
         }
       }, util.httpErrorFn(this))
     },
