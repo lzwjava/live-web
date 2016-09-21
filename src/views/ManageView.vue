@@ -7,6 +7,11 @@
       请在 OBS 软件设置直播地址: {{live.rtmpUrl}}
     </p>
 
+
+    <p>
+      微信分享地址: http://m.quzhiboapp.com?liveId={{live.liveId}}
+    </p>
+
     <div class="control-btn">
       <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
