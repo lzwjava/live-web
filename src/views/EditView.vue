@@ -82,7 +82,8 @@ export default {
       user: {},
       amount: 0,
       myDate: '',
-      coverUrl: ''
+      coverUrl: '',
+      liveId: 0
     }
   },
   computed: {
@@ -91,6 +92,8 @@ export default {
     }
   },
   created() {
+    var query = this.$route.params
+    this.liveId = query.liveId
     this.fetchUser()
     this.fetchLive()
   },
@@ -107,7 +110,7 @@ export default {
     },
     fetchLive() {
       this.$broadcast('loading')
-      this.$http.get('lives/lastPrepare').then((res) => {
+      this.$http.get('lives/' + this.liveId).then((res) => {
         if (util.filterError(this, res)) {
           this.$broadcast('loaded')
           this.setLive(res.data.result)

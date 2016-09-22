@@ -20,9 +20,6 @@
       <button class="btn btn-blue" @click="endLive">结束直播</button>
     </div>
 
-
-
-
   </div>
 </template>
 

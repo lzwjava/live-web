@@ -47,7 +47,7 @@ export default {
         if (util.filterError(this, res)) {
           if (res.data.result.scanned) {
             // scanned
-            window.location.href = '#/edit'
+            this.$router.go('/mylist')
           } else {
             // not scanned
             this.poll()

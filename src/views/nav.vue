@@ -24,8 +24,7 @@
                 <user-avatar :user="user"></user-avatar>
                 <div class="name">{{user.username}}</div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#/edit">编辑</a>
-                <a class="dropdown-item" href="#/mylist">直播控制</a>
+                <a class="dropdown-item" href="#/mylist">我的直播</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" @click="logout" href="/">注销</a>
               </div>

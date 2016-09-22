@@ -40,7 +40,7 @@ router.map({
   '/': {
     component: HomeView
   },
-  '/edit' : {
+  '/edit/:liveId' : {
     component: EditView
   },
   '/manage/:liveId': {
