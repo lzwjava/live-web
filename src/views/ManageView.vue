@@ -4,20 +4,25 @@
     <p class="status">当前直播状态:{{statusText}}</p>
 
     <p>
-      请在 OBS 软件设置直播地址: {{live.rtmpUrl}}
+      记得要在 OBS 中录制视频
     </p>
 
+    <p>
+      请在 OBS 软件设置直播地址: {{live.rtmpUrl}}
+    </p>
 
     <p>
       微信分享地址: http://m.quzhiboapp.com?liveId={{live.liveId}}
     </p>
 
     <div class="control-btn">
+
       <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
       <button class="btn btn-blue" @click="notifyLive">群发开播短信</button>
 
       <button class="btn btn-blue" @click="endLive">结束直播</button>
+
     </div>
 
   </div>

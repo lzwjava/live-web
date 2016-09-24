@@ -1,10 +1,8 @@
 <template>
   <div class="list-view">
-    <h3>选择直播</h3>
-
     <button class="btn btn-blue" @click="createLive"> 创建直播</button>
 
-    <h3>直播列表</h3>
+    <h3>我的直播列表</h3>
 
     <ul class="live-list">
       <li class="live" v-for="live in lives">

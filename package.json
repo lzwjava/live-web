@@ -40,6 +40,7 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
+    "api": "file:///Users/lzw/square-root/api",
     "debug": "^2.2.0",
     "es6-promise": "^3.0.2",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -50,6 +51,7 @@
     "marked": "^0.3.6",
     "qiniu-js-sdk": "0.0.2",
     "rimraf": "^2.5.4",
+    "video.js": "^5.11.6",
     "vue": "^1.0.26",
     "vue-resource": "^0.6.1",
     "vue-router": "^0.7.13",

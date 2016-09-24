@@ -8,6 +8,7 @@ import HomeView from './views/HomeView.vue'
 import EditView from './views/EditView.vue'
 import ManageView from './views/ManageView.vue'
 import ListView from './views/ListView.vue'
+import LiveView from './views/LiveView.vue'
 
 // install router
 Vue.use(Router)
@@ -30,7 +31,7 @@ console.log('env ' + process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   localStorage.debug = ''
 } else {
-  localStorage.debug = 'HomeView,EditView,markdown-area,nav,util, ManageView';
+  localStorage.debug = 'HomeView,EditView,markdown-area,nav,util,ManageView,api';
 }
 
 // routing
@@ -48,6 +49,9 @@ router.map({
   },
   '/mylist': {
     component: ListView
+  },
+  '/live/:liveId': {
+    component: LiveView
   }
 })
 

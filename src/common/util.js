@@ -34,6 +34,13 @@ exports.show = (component, type, text, duration) => {
   component.$dispatch('show-msg', type, text)
 };
 
+exports.promiseErrorFn = (comp, callback) => {
+  return (error) => {
+    show(comp, 'error', error)
+    comp.$dispatch('loading', false)
+    callback && callback()
+  }
+}
 
 exports.statusText = (status) => {
   switch (status) {
