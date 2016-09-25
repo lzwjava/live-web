@@ -5,7 +5,7 @@
       <div class="subject-area">
         <p class="subject">
           {{live.subject}}
-          <button class="btn btn-no-play" @click="reload">Chrome 无法播放?点击我</button>
+          <button class="btn btn-no-play" @click="reload">暂只支持 Chrome、Firebox。若无法播放，点击我</button>
         </p>
       </div>
 
