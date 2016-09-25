@@ -38,6 +38,7 @@ import api from 'api'
 import util from '../common/util'
 var videojs = require('../../node_modules/video.js/dist/video.min.js')
 require('../../node_modules/video.js/dist/video-js.min.css')
+require('font-awesome/css/font-awesome.css')
 
 var debug = require('debug')('LiveView')
 
@@ -186,6 +187,8 @@ export default {
   .btn-no-play
     background-color #D8D8D8
     margin-top 40px
+    font-size 20px
+    padding 10px 20px
     margin-bottom 60px
 
 
