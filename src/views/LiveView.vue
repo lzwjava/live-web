@@ -26,6 +26,8 @@
         </div>
       </div>
 
+      <button class="btn btn-no-play" @click="reload">无法播放?</button>
+
     </div>
 
 </template>
@@ -60,6 +62,15 @@ export default {
             util.show(this, 'error', '请先报名参与直播')
             return
           }
+          // var player = videojs('my_video_1')
+          // debug('before inited')
+          // debug(player)
+            // debug('hasInitVideo')
+            // this.changeSource({
+            //   type: 'video/flv',
+            //   src: this.live.flvUrl
+            // })
+            debug('no init video')
           this.playVideo()
         }).catch(util.promiseErrorFn)
     }
@@ -75,7 +86,7 @@ export default {
       debug('flvUrl' + this.live.flvUrl)
       debug('videojs')
       debug(videojs)
-      var player = videojs('my_video_1', {
+      player = videojs('my_video_1', {
     		techOrder: ['flash', 'html5'],
     		autoplay: true,
     		sources: [{
@@ -88,6 +99,24 @@ export default {
       //   // player.load();
 		  //   // player.play();
       // })
+    },
+    changeSource(src) {
+      var player = videojs('my_video_1')
+    	player.pause();
+    	player.currentTime(0);
+
+    	player.src(src);
+
+    	player.ready(function() {
+    		player.one('loadeddata', videojs.bind(player, function() {
+    			this.currentTime(0);
+    		}));
+    		player.load();
+    		player.play();
+    	});
+    },
+    reload() {
+      location.reload()
     }
   }
 }
@@ -154,6 +183,10 @@ export default {
   .live-no-ready
     .tip
       font-size 20px
+  .btn-no-play
+    background-color #D8D8D8
+    margin-top 40px
+    margin-bottom 60px
 
 
 </style>
