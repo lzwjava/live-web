@@ -46,20 +46,27 @@ export default {
       live: {}
     }
   },
+  route: {
+    data({to}) {
+      var params = to.params
+      this.liveId = params.liveId
+      debug('liveId:' + this.liveId)
+      this.$dispatch('loading', true)
+      api.fetchLive(this, this.liveId)
+        .then((data) => {
+          this.$dispatch('loading', false)
+          this.live = data
+          if (!this.live.canJoin) {
+            util.show(this, 'error', '请先报名参与直播')
+            return
+          }
+          this.playVideo()
+        }).catch(util.promiseErrorFn)
+    }
+  },
   created() {
   },
   ready() {
-    var params = this.$route.params
-    this.liveId = params.liveId
-    api.fetchLive(this, this.liveId)
-      .then((data) => {
-        this.live = data
-        if (!this.live.canJoin) {
-          util.show(this, 'error', '请先报名参与直播')
-          return
-        }
-        this.playVideo()
-      }).catch(util.promiseErrorFn)
   },
   computed: {
   },
@@ -76,6 +83,7 @@ export default {
     			src: this.live.flvUrl
     		}]
     	});
+      debug(player)
       // player.ready(function() {
       //   // player.load();
 		  //   // player.play();

@@ -5,7 +5,6 @@
 
     <ul class="live-list">
       <li class="live" v-for="live in attendedLives">
-
         <button class="btn btn-blue subject" @click="watch(live.liveId)">{{live.subject}}</button>
       </li>
     </ul>
