@@ -5,6 +5,7 @@
       <div class="subject-area">
         <p class="subject">
           {{live.subject}}
+          <button class="btn btn-no-play" @click="reload">Chrome 无法播放?点击我</button>
         </p>
       </div>
 
@@ -25,8 +26,6 @@
           </div>
         </div>
       </div>
-
-      <button class="btn btn-no-play" @click="reload">无法播放?</button>
 
     </div>
 
@@ -186,10 +185,8 @@ export default {
       font-size 20px
   .btn-no-play
     background-color #D8D8D8
-    margin-top 40px
-    font-size 20px
-    padding 10px 20px
-    margin-bottom 60px
+    font-size 15px
+    padding 5px 10px
 
 
 </style>
