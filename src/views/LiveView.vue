@@ -2,6 +2,12 @@
 
     <div class="live-view">
 
+      <div class="subject-area">
+        <p class="subject">
+          {{live.subject}}
+        </p>
+      </div>
+
       <div class="player-area">
         <div class="video-wait" v-show="live.status == 10">
           <p class="big-title">离直播开始还有 {{timeGap}}</p>
@@ -14,7 +20,7 @@
             <img :src="live.coverUrl" width="100%" height="100%"/>
             <div class="video-center">
               <img class="loading-img" v-show="playStatus == 1" src="../img/video-circle.png">
-              <div class="canplay" v-show="playStatus == 0" @click="canPlayClick"></div>
+              <div class="canplay" v-show="playStatus == 0"></div>
             </div>
           </div>
         </div>
@@ -92,6 +98,9 @@ export default {
 .live-view
   min-height 700px
   text-align center
+  .subject-area
+    .subject
+      font-size 20px
   .player-area
     width 800px
     height 600px
