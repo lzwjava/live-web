@@ -57,3 +57,8 @@ exports.statusText = (status) => {
   }
   return '未知';
 }
+
+exports.curUser = () => {
+  var userStr = window.localStorage.getItem('user')
+  return JSON.parse(userStr)
+}

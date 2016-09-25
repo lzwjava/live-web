@@ -2,14 +2,13 @@
   <div class="list-view">
     <button class="btn btn-blue" @click="createLive"> 创建直播</button>
 
-    <h3>我的直播列表</h3>
+    <h3>我发起的直播列表</h3>
 
     <ul class="live-list">
       <li class="live" v-for="live in lives">
         {{live.subject}}
         <button class="btn btn-blue subject" @click="edit(live.liveId)">编辑</button>
         <button class="btn btn-blue subject" @click="manage(live.liveId)">控制</button>
-
       </li>
     </ul>
 
@@ -28,7 +27,7 @@ export default {
   },
   data() {
     return {
-      lives: []
+      lives: [],
     }
   },
   created() {

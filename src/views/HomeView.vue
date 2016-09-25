@@ -33,6 +33,12 @@ export default {
   },
 
   created () {
+    var params = this.$route.query;
+    if (params.sessionToken) {
+      this.loginBySessionToken(params.sessionToken)
+      return
+    }
+    debug('params:' + params)
     this.code = this.genCode()
     this.poll()
   },
@@ -45,15 +51,43 @@ export default {
         'code': this.code
       }).then((res) => {
         if (util.filterError(this, res)) {
-          if (res.data.result.scanned) {
-            // scanned
-            this.$router.go('/mylist')
+          var result = res.data.result
+          if (result.scanned) {
+            this.$dispatch('loading', true)
+            this.$http.get('self').then((res) => {
+              this.$dispatch('loading', false)
+              if (util.filterError(this, res)) {
+                this.$dispatch('updateUser', res.data.result)
+                // scanned
+                if (result.type == 0) {
+                  this.$router.go('/mylist')
+                } else if (result.type == 1) {
+                  var json = JSON.parse(result.data)
+                  var liveId = json.liveId
+                  this.$router.go('/lives/' + liveId)
+                } else {
+                  util.show(this, 'error', '未知的类型');
+                }
+              }
+            }, util.httpErrorFn(this))
           } else {
             // not scanned
             this.poll()
           }
         }
       })
+    },
+    loginBySessionToken: function (sessionToken) {
+      this.$http.get('self', {
+        sessionToken: sessionToken
+      }).then((resp) => {
+        if (util.filterError(this, resp)) {
+          var token = resp.data.result.sessionToken
+          debug('token:' + token)
+          document.cookie = "SessionToken=" + token
+          this.$router.go('/')
+        }
+      }, util.httpErrorFn(this));
     },
     genCode() {
       return 'quzhibo-' + this.randomString(32)
@@ -65,7 +99,10 @@ export default {
         result += chars[Math.floor(Math.random() * chars.length)]
       }
       return result
-    }
+    },
+    fetchUser() {
+
+    },
   },
 
   filters: {

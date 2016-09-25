@@ -94,20 +94,12 @@ export default {
   created() {
     var query = this.$route.params
     this.liveId = query.liveId
-    this.fetchUser()
     this.fetchLive()
   },
   ready() {
     this.initQiniu()
   },
   methods: {
-    fetchUser() {
-      this.$http.get('self').then((res) => {
-        if (util.filterError(this, res)) {
-          this.$dispatch('updateUser', res.data.result)
-        }
-      }, util.httpErrorFn(this))
-    },
     fetchLive() {
       this.$broadcast('loading')
       this.$http.get('lives/' + this.liveId).then((res) => {

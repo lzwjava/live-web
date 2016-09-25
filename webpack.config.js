@@ -48,6 +48,10 @@ var config = {
       {
         test: /plupload\/js\/moxie\.js/,
         loader: 'exports?this.mOxie'
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "file-loader"
       }
     ]
   },
