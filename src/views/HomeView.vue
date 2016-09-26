@@ -116,8 +116,11 @@ export default {
 @import "../stylus/base.styl"
 
 .home-view
-  min-height 600px
+  min-height 700px
+  background url("../img/hero.jpg") no-repeat
+  background-size cover
   .big-word
+    color #fff
     font-size 20px
     text-align center
     margin-top 80px
