@@ -1,7 +1,7 @@
 <template>
 
   <div class="home-view">
-    <div class="big-word">请扫描二维码登录电脑版</div>
+    <div class="big-word">请在微信版直播页点击电脑按钮 <br>扫描二维码登录电脑版</div>
     <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
   </div>
 
