@@ -312,6 +312,8 @@ export default {
 
 <style lang="stylus">
 
+@import '../../node_modules/rupture/rupture/index.styl'
+
 .full-space
     position absolute
     top 0
@@ -326,6 +328,8 @@ export default {
     width 700px
     margin-left 200px
     float left
+    +below(1200px)
+      margin-left 0px
     .player-area
       width 700px
       height 500px
@@ -382,6 +386,8 @@ export default {
     width 300px
     margin-left 950px
     position relative
+    +below(1200px)
+      margin-left 750px
     .chat-area
       padding 5px
       width 100%

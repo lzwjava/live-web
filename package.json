@@ -55,6 +55,7 @@
     "marked": "^0.3.6",
     "qiniu-js-sdk": "0.0.2",
     "rimraf": "^2.5.4",
+    "rupture": "^0.6.1",
     "video.js": "^5.11.6",
     "vue": "^1.0.26",
     "vue-resource": "^0.6.1",
