@@ -1,23 +1,31 @@
 <template>
-  <div class="markdown-area" :class="{active: content.length}">
-    <textarea placeholder="{{ placeholder }}" aria-label="{{ placeholder }}" v-show="!showPreview" v-model='content' v-el:text @keydown="keyboardSubmit"></textarea>
+  <div id="markdown-container" class="markdown-area" :class="{active: content.length}">
+    <textarea id="textarea" placeholder="{{ placeholder }}" aria-label="{{ placeholder }}" v-show="!showPreview" v-model='content' v-el:text @keydown="keyboardSubmit"></textarea>
 
     <markdown class="markdown-preview" v-show="showPreview" :content="content" :show = "showPreview"></markdown>
 
     <div class="markdown-actions" v-show="!showPreview">
-<!--       <a href="#" @click="image" v-show="!uploading">Image</a> -->
+      <div id="image-upload-container">
+        <a href="#" id="image-btn">上传图片</a>
+      </div>
+
       <a href="#" @click="preview">预览模式</a>
     </div>
     <div class="markdown-actions" v-show="showPreview">
       <a href="#" @click="focus">编辑模式</a>
     </div>
-<!--     <input type="file" style="opacity: 0; left: -99999px; position: absolute" v-el:file accept="image/*" @change="upload">
- -->  </div>
+    <input type="file" style="opacity: 0; left: -99999px; position: absolute" v-el:file accept="image/*" @change="upload">
+   </div>
 </template>
 
 <script>
   var debug = require('debug')('markdown-area');
   import Markdown from './markdown.vue'
+  import util from '../common/util'
+  require('moxie');
+  require('plupload'); // use for Qiniu js sdk
+  import Qiniu from 'qiniu-js-sdk'
+
   module.exports = {
     components: {
       'markdown': Markdown
@@ -34,6 +42,9 @@
         showPreview: false,
         uploading: false
       };
+    },
+    created() {
+      this.initQiniu()
     },
     methods: {
       keyboardSubmit: function(e) {
@@ -59,8 +70,28 @@
         this.showPreview = true;
       },
       image: function(e) {
-        e.preventDefault();
-        this.$els.file.click();
+      },
+      insertLink(link) {
+        var textarea = document.getElementById('textarea')
+        this.insertAtCursor(textarea, link)
+      },
+      insertAtCursor(myField, myValue) {
+          //IE support
+          if (document.selection) {
+              myField.focus();
+              sel = document.selection.createRange();
+              sel.text = myValue;
+          }
+          //MOZILLA and others
+          else if (myField.selectionStart || myField.selectionStart == '0') {
+              var startPos = myField.selectionStart;
+              var endPos = myField.selectionEnd;
+              myField.value = myField.value.substring(0, startPos)
+                  + myValue
+                  + myField.value.substring(endPos, myField.value.length);
+          } else {
+              myField.value += myValue;
+          }
       },
       upload: function() {
         var files = this.$els.file.files;
@@ -75,6 +106,65 @@
         //   this.focus();
         //   this.uploading = false;
         // }.bind(this));
+      },
+      initQiniu() {
+        var component = this;
+        this.$http.get('files/uptoken').then((res) => {
+          if (util.filterError(this, res)) {
+            var result = res.data.result;
+            var uptoken = result.uptoken;
+            var bucketUrl = result.bucketUrl;
+            var key =result.key;
+            var uploader = Qiniu.uploader({
+                runtimes: 'html5,flash,html4',    //上传模式,依次退化
+                browse_button: 'image-btn',       //上传选择的点选按钮，**必需**
+                uptoken_url: 'useless',
+                uptoken: uptoken,
+                domain: bucketUrl,
+                flash_swf_url: 'js/plupload/Moxie.swf',
+                unique_names: false,
+                save_key: false,
+                get_new_uptoken: false,           //设置上传文件的时候是否每次都重新获取新的token
+                container: 'image-upload-container',    //上传区域DOM ID，默认是browser_button的父元素，
+                max_file_size: '100mb',           //最大文件体积限制
+                max_retries: 3,                   //上传失败最大重试次数
+                dragdrop: false,                  //开启可拖曳上传
+                drop_element: 'markdown-container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                chunk_size: '4mb',                //分块上传时，每片的体积
+                auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+                init: {
+                    'FilesAdded': function(up, files) {
+                    },
+                    'BeforeUpload': function(up, file) {
+                    },
+                    'UploadProgress': function(up, file) {
+                    },
+                    'FileUploaded': function(up, file, info) {
+                           // info:
+                           // {
+                           //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                           //    "key": "gogopher.jpg"
+                           //  }
+                           var res = JSON.parse(info);
+                           var sourceLink = bucketUrl + '/' + res.key;
+                           debug('sourceLink: %j', sourceLink);
+                           component.insertLink(sourceLink)
+                    },
+                    'Error': function(up, err, errTip) {
+                           debug('qiniu error %j errTip %j', err, errTip);
+                           util.show(component, 'error', errTip)
+                    },
+                    'UploadComplete': function() {
+                    },
+                    'Key': function(up, file) {
+                        // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                        // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                        return util.randomString(6)
+                    }
+                }
+            });
+          }
+        }, util.httpErrorFn(this))
       }
     }
   }
@@ -94,6 +184,10 @@
     right 0
     opacity 0.6
     line-height 10px
+    #image-upload-container
+      display inline
+      #image-btn
+        margin-right 20px
     a
       color #666
       font-size 16px

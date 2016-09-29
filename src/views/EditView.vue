@@ -83,7 +83,7 @@ export default {
       amount: 0,
       myDate: '',
       coverUrl: '',
-      liveId: 0
+      liveId: 0,
     }
   },
   computed: {
@@ -91,13 +91,17 @@ export default {
       return util.statusText(this.live.status)
     }
   },
+  route: {
+    data({to}) {
+      var query = this.$route.params
+      this.liveId = query.liveId
+      this.fetchLive()
+      this.initQiniu()
+    }
+  },
   created() {
-    var query = this.$route.params
-    this.liveId = query.liveId
-    this.fetchLive()
   },
   ready() {
-    this.initQiniu()
   },
   methods: {
     fetchLive() {
@@ -206,7 +210,7 @@ export default {
                   'Key': function(up, file) {
                       // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                       // 该配置必须要在 unique_names: false , save_key: false 时才生效
-                      return result.key;
+                      return util.randomString(6)
                   }
               }
           });
