@@ -12,7 +12,7 @@
     </p>
 
     <p>
-      微信分享地址: http://m.quzhiboapp.com?liveId={{live.liveId}}
+      微信分享地址: http://m.quzhiboapp.com/?liveId={{live.liveId}}
     </p>
 
     <div class="control-btn">
