@@ -9,6 +9,7 @@
         {{live.subject}}
         <button class="btn btn-blue subject" @click="edit(live.liveId)">编辑</button>
         <button class="btn btn-blue subject" @click="manage(live.liveId)">控制</button>
+        <button class="btn btn-blue subject" @click="see(live.liveId)">观看</button>
       </li>
     </ul>
 
@@ -30,13 +31,17 @@ export default {
       lives: [],
     }
   },
+  route:{
+    data({to}) {
+      this.$http.get('lives/me')
+      .then((res) => {
+        if (util.filterError(this, res)) {
+          this.lives = res.data.result
+        }
+      }, util.httpErrorFn(this))
+    }
+  },
   created() {
-    this.$http.get('lives/me')
-    .then((res) => {
-      if (util.filterError(this, res)) {
-        this.lives = res.data.result
-      }
-    }, util.httpErrorFn(this))
   },
   methods:{
     edit(liveId) {
@@ -44,6 +49,9 @@ export default {
     },
     manage(liveId) {
       this.$router.go('/manage/' + liveId)
+    },
+    see(liveId) {
+      this.$router.go('/lives/' + liveId)
     },
     createLive() {
       this.$http.post('lives')
@@ -69,5 +77,6 @@ export default {
       text-align center
       .subject
         font-size 18px
+        margin-right 20px
 
 </style>

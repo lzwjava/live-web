@@ -24,12 +24,16 @@ export default {
     }
   },
   ready() {
-    this.$http.get('lives/attended')
-    .then((res) => {
-      if (util.filterError(this, res)) {
-        this.attendedLives = res.data.result
-      }
-    })
+  },
+  route: {
+    data({to}) {
+      this.$http.get('lives/attended')
+      .then((res) => {
+        if (util.filterError(this, res)) {
+          this.attendedLives = res.data.result
+        }
+      })
+    }
   },
   components: {
 

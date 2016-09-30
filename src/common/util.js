@@ -1,5 +1,8 @@
 var debug = require('debug')('util');
 
+import moment from 'moment'
+moment.locale('zh-cn')
+
 exports.filterError = (component, res) => {
   debug('resp:%j', res.data)
   if (res.data.status != "success") {
@@ -68,4 +71,13 @@ exports.randomString = (length) => {
     var result = '';
     for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
     return result;
+}
+
+exports.timeGap = (ts) => {
+  var text = moment(ts, "YYYY-MM-DD hh:mm::ss").fromNow()
+  if (text) {
+    text = text.replace(/[\u5185]/g, '后')
+    text = text.replace(' ', '')
+  }
+  return text
 }

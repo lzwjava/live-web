@@ -45,10 +45,14 @@ export default {
       return util.statusText(this.live.status)
     }
   },
+  route: {
+    data({to}) {
+      var params = this.$route.params
+      this.liveId = params.liveId
+      this.fetchLive()
+    }
+  },
   created() {
-    var params = this.$route.params
-    this.liveId = params.liveId
-    this.fetchLive()
   },
   methods: {
     fetchLive() {

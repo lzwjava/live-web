@@ -155,6 +155,9 @@ export default {
   ready() {
   },
   computed: {
+    timeGap() {
+      return util.timeGap(this.live.planTs)
+    }
   },
   methods: {
     playVideo () {

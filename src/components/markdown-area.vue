@@ -6,7 +6,7 @@
 
     <div class="markdown-actions" v-show="!showPreview">
       <div id="image-upload-container">
-        <a href="#" id="image-btn">上传图片</a>
+        <a @click.prevent="uploadImg" id="image-btn">上传图片</a>
       </div>
 
       <a href="#" @click="preview">预览模式</a>
@@ -44,6 +44,9 @@
       };
     },
     created() {
+
+    },
+    ready() {
       this.initQiniu()
     },
     methods: {
@@ -107,6 +110,9 @@
         //   this.uploading = false;
         // }.bind(this));
       },
+      uploadImg() {
+
+      },
       initQiniu() {
         var component = this;
         this.$http.get('files/uptoken').then((res) => {
@@ -148,7 +154,7 @@
                            var res = JSON.parse(info);
                            var sourceLink = bucketUrl + '/' + res.key;
                            debug('sourceLink: %j', sourceLink);
-                           component.insertLink(sourceLink)
+                           component.insertLink('![](' + sourceLink + ')\n')
                     },
                     'Error': function(up, err, errTip) {
                            debug('qiniu error %j errTip %j', err, errTip);

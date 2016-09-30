@@ -53,6 +53,7 @@
     "inherit": "^2.2.6",
     "leancloud-realtime": "^3.2.3",
     "marked": "^0.3.6",
+    "moment": "^2.15.1",
     "qiniu-js-sdk": "0.0.2",
     "rimraf": "^2.5.4",
     "rupture": "^0.6.1",

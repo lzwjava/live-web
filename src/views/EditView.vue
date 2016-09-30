@@ -3,7 +3,6 @@
 
     <loading>
       <div class="write-container">
-        <form>
           <div class="status">
             {{statusText}}
           </div>
@@ -44,8 +43,6 @@
             <button class="btn btn-blue" @click="saveLive">保存</button>
             <button class="btn btn-blue" @click="publishLive">提交审核</button>
           </div>
-
-        </form>
       </div>
     </loading>
 
@@ -96,12 +93,12 @@ export default {
       var query = this.$route.params
       this.liveId = query.liveId
       this.fetchLive()
-      this.initQiniu()
     }
   },
   created() {
   },
   ready() {
+    this.initQiniu()
   },
   methods: {
     fetchLive() {
@@ -180,7 +177,7 @@ export default {
               max_file_size: '100mb',           //最大文件体积限制
               max_retries: 3,                   //上传失败最大重试次数
               dragdrop: false,                  //开启可拖曳上传
-              drop_element: 'container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+              drop_element: 'upload-container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
               chunk_size: '4mb',                //分块上传时，每片的体积
               auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
               init: {
