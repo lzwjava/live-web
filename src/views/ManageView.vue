@@ -12,7 +12,7 @@
     </p>
 
     <p>
-      微信分享地址: http://m.quzhiboapp.com/?liveId={{live.liveId}}
+      微信分享地址:{{shareLink}}
     </p>
 
     <div class="control-btn">
@@ -24,6 +24,8 @@
       <button class="btn btn-blue" @click="endLive">结束直播</button>
 
     </div>
+
+    <img :src="'api/qrcodes/one?text=' + shareLink" alt="" />
 
   </div>
 </template>
@@ -43,6 +45,9 @@ export default {
   computed: {
     statusText () {
       return util.statusText(this.live.status)
+    },
+    shareLink() {
+      return 'http://m.quzhiboapp.com/?liveId=' + this.live.liveId
     }
   },
   route: {
@@ -108,6 +113,6 @@ export default {
     margin-left 50px
     margin-right 50px
   .control-btn
-    margin-top 100px
+    margin-top 50px
 
 </style>
