@@ -29,18 +29,20 @@ export default {
     data ({ to }) {
       const page = +to.params.page
       document.title = '趣直播'
+
+      var params = this.$route.query;
+      if (params.sessionToken) {
+        this.loginBySessionToken(params.sessionToken)
+        return
+      }
+      debug('params:' + params)
+      this.code = this.genCode()
+      this.poll()
     }
   },
 
   created () {
-    var params = this.$route.query;
-    if (params.sessionToken) {
-      this.loginBySessionToken(params.sessionToken)
-      return
-    }
-    debug('params:' + params)
-    this.code = this.genCode()
-    this.poll()
+
   },
 
   destroyed () {
@@ -85,7 +87,15 @@ export default {
           var token = resp.data.result.sessionToken
           debug('token:' + token)
           document.cookie = "SessionToken=" + token
-          this.$router.go('/')
+
+          this.$dispatch('loading', true)
+          this.$http.get('self').then((res) => {
+            this.$dispatch('loading', false)
+            if (util.filterError(this, res)) {
+              this.$dispatch('updateUser', res.data.result)
+              this.$router.go('/mylist')
+            }
+          }, util.httpErrorFn(this))
         }
       }, util.httpErrorFn(this));
     },
