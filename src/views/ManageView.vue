@@ -8,7 +8,7 @@
     </p>
 
     <p>
-      请在 OBS 软件设置直播地址: {{live.rtmpUrl}}
+      请在 OBS 软件设置直播地址: {{live.pushUrl}}
     </p>
 
     <p>
