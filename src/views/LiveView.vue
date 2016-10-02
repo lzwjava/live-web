@@ -17,7 +17,8 @@
             <p class="small-title">感谢参与，开播时您将收到一条短信通知~</p>
           </div>
           <div class="video-on" v-show="live.status == 20 || live.status == 30">
-            <video id="my_video_1" class="video-js vjs-default-skin" controls preload="auto" width="700" height="500">
+            <video id="my_video_1" class="video-js vjs-default-skin"
+              controls preload="auto" width="700" height="500">
 
             <div class="video-poster-cover" v-show="playStatus != 2">
               <img :src="live.coverUrl" width="100%" height="100%"/>
@@ -161,18 +162,33 @@ export default {
   },
   methods: {
     playVideo () {
-      debug('flvUrl' + this.live.flvUrl)
-      debug('videojs')
-      debug(videojs)
-      player = videojs('my_video_1', {
-    		techOrder: ['flash', 'html5'],
-    		autoplay: true,
-    		sources: [{
-    			type: "video/x-flv",
-    			src: this.live.flvUrl
-    		}]
-    	});
-      debug(player)
+      if (this.live.status < 20) {
+        return;
+      }
+      var player;
+      if (this.live.status == 20) {
+        player = videojs('my_video_1', {
+      		techOrder: ['flash', 'html5'],
+      		autoplay: true,
+      		sources: [
+            {
+        			type: "video/x-flv",
+        			src: this.live.flvUrl
+        		}
+          ]
+      	});
+      } else if (this.live.status == 30) {
+        player = videojs('my_video_1', {
+      		techOrder: ['html5', 'flash'],
+      		autoplay: true,
+      		sources: [
+            {
+              type: 'video/mp4',
+              src: this.live.videoUrl
+            }
+          ]
+      	});
+      }
     },
     changeSource(src) {
       var player = videojs('my_video_1')
