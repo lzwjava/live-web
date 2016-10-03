@@ -8,11 +8,11 @@
     </p>
 
     <p>
-      请在 OBS 软件设置直播地址: {{live.pushUrl}}
-    </p>
-
-    <p>
-      微信分享地址:{{shareLink}}
+      请在 OBS 软件设置:
+      <br>
+      1)直播地址(URL): {{pushPrefix}}
+      <br>
+      2)流密钥(Streaming Key): {{pushKey}}
     </p>
 
     <div class="control-btn">
@@ -24,6 +24,15 @@
       <button class="btn btn-blue" @click="endLive">结束直播</button>
 
     </div>
+
+
+    <p>
+      微信分享地址:{{shareLink}}
+    </p>
+
+    <p>
+      二维码:
+    </p>
 
     <img :src="'api/qrcodes/one?text=' + shareLink" alt="" />
 
@@ -48,6 +57,22 @@ export default {
     },
     shareLink() {
       return 'http://m.quzhiboapp.com/?liveId=' + this.live.liveId
+    },
+    pushPrefix() {
+      if (!this.live.pushUrl) {
+        return ''
+      }
+      var regex = /(rtmp:\/\/.*)\/(.*)/g
+      var match = regex.exec(this.live.pushUrl)
+      return match[1]
+    },
+    pushKey() {
+      if (!this.live.pushUrl) {
+        return ''
+      }
+      var regex = /(rtmp:\/\/.*)\/(.*)/g
+      var match = regex.exec(this.live.pushUrl)
+      return match[2]
     }
   },
   route: {
