@@ -163,9 +163,9 @@ export default {
   methods: {
     playVideo () {
       if (this.live.status < 20) {
-        return;
+        return
       }
-      var player;
+      var player
       if (this.live.status == 20) {
         player = videojs('my_video_1', {
       		techOrder: ['flash', 'html5'],
@@ -176,7 +176,7 @@ export default {
         			src: this.live.flvUrl
         		}
           ]
-      	});
+      	})
       } else if (this.live.status == 30) {
         player = videojs('my_video_1', {
       		techOrder: ['html5', 'flash'],
@@ -187,7 +187,7 @@ export default {
               src: this.live.videoUrl
             }
           ]
-      	});
+      	})
       }
     },
     changeSource(src) {
