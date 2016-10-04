@@ -31,6 +31,12 @@
             </div>
           </div>
 
+
+          <div class="row">
+            <span class="hint">请填写视频宣传地址(mp4地址，可无)</span>
+            <input type="text" v-model="previewUrl" class="input-url">
+          </div>
+
           <div class="row">
             <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
             <div class="edit-area">
@@ -80,6 +86,7 @@ export default {
       amount: 0,
       myDate: '',
       coverUrl: '',
+      previewUrl: '',
       liveId: 0,
     }
   },
@@ -117,6 +124,7 @@ export default {
       this.content = live.detail
       this.myDate = live.planTs
       this.coverUrl = live.coverUrl
+      this.previewUrl = live.previewUrl
     },
     saveLive() {
       var data = {};
@@ -131,6 +139,9 @@ export default {
       }
       if (this.content) {
         data.detail = this.content
+      }
+      if (this.previewUrl) {
+        data.previewUrl = this.previewUrl
       }
       this.saveLiveData(data)
     },
@@ -252,6 +263,8 @@ export default {
         text-indent 10px
         &:focus
           border 1px solid #1CB2EF
+      .input-url
+        width 300px
       .input-amount
         width 80px
       .input-title
