@@ -3,6 +3,8 @@
     <my-nav></my-nav>
 
     <!-- main view -->
+
+
     <router-view
       class="view"
       keep-alive
@@ -18,12 +20,14 @@
 
 import Nav from './nav.vue'
 import MyFooter from './footer.vue'
+// import Loading from '../components/loading.vue'
 
 export default {
   name: 'App',
   components: {
     'my-nav': Nav,
-    'my-footer': MyFooter
+    'my-footer': MyFooter,
+    // 'loading': Loading
   },
   data() {
     return {
@@ -36,6 +40,12 @@ export default {
     'updateUser': function (user) {
       this.$broadcast('updateNavUser', user)
     },
+    'loading': function() {
+      this.$broadcast('loading')
+    },
+    'loaded': function() {
+      this.$broadcast('loaded')
+    }
   }
 }
 

@@ -2,75 +2,75 @@
 
     <div class="live-view">
 
-      <div class="left-panel">
+        <div class="left-panel">
 
-        <div class="subject-area">
-          <p class="subject">
-            {{live.subject}}
-          </p>
-          <button class="btn btn-no-play" @click="reload">暂只支持 Chrome、Firefox。若无法播放，点击我</button>
-        </div>
-
-        <div class="player-area">
-          <div class="video-wait" v-show="live.status == 10">
-            <p class="big-title">离直播开始还有 {{timeGap}}</p>
-            <p class="small-title">感谢参与，开播时您将收到一条短信通知~</p>
+          <div class="subject-area">
+            <p class="subject">
+              {{live.subject}}
+            </p>
+            <button class="btn btn-no-play" @click="reload">暂只支持 Chrome、Firefox。若无法播放，点击我</button>
           </div>
-          <div class="video-on" v-show="live.status == 20 || live.status == 30">
-            <video id="my_video_1" class="video-js vjs-default-skin"
-              controls preload="auto" width="700" height="500">
 
-            <div class="video-poster-cover" v-show="playStatus != 2">
-              <img :src="live.coverUrl" width="100%" height="100%"/>
-              <div class="video-center">
-                <img class="loading-img" v-show="playStatus == 1" src="../img/video-circle.png">
-                <div class="canplay" v-show="playStatus == 0"></div>
+          <div class="player-area">
+            <div class="video-wait" v-show="live.status == 10">
+              <p class="big-title">离直播开始还有 {{timeGap}}</p>
+              <p class="small-title">感谢参与，开播时您将收到一条短信通知~</p>
+            </div>
+            <div class="video-on" v-show="live.status == 20 || live.status == 30">
+              <video id="my_video_1" class="video-js vjs-default-skin"
+                controls preload="auto" width="700" height="500">
+
+              <div class="video-poster-cover" v-show="playStatus != 2">
+                <img :src="live.coverUrl" width="100%" height="100%"/>
+                <div class="video-center">
+                  <img class="loading-img" v-show="playStatus == 1" src="../img/video-circle.png">
+                  <div class="canplay" v-show="playStatus == 0"></div>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
 
-      </div>
+        <div class="right-panel">
+          <div class="chat-area">
+            <ul class="msg-list" v-el:msg-list>
 
-      <div class="right-panel">
-        <div class="chat-area">
-          <ul class="msg-list" v-el:msg-list>
+              <li class="msg" v-for="msg in msgs">
 
-            <li class="msg" v-for="msg in msgs">
+                <span class="name">{{msg.attributes.username}}</span>
 
-              <span class="name">{{msg.attributes.username}}</span>
-
-              <div class="content">
-                <div class="bubble">
-                  <div class="text-content bubble-cont" v-if="msg.type == -1">
-                    <div class="plain">
-                      <pre class="text">{{msg.text}}</pre>
+                <div class="content">
+                  <div class="bubble">
+                    <div class="text-content bubble-cont" v-if="msg.type == -1">
+                      <div class="plain">
+                        <pre class="text">{{msg.text}}</pre>
+                      </div>
                     </div>
-                  </div>
-                  <div class="audio-content bubble-cont" v-if="msg.type == 1">
-                    <div class="voice" @click="playVoice(msg.attributes.serverId)">
-                      <i class="voice-gray"> </i>
+                    <div class="audio-content bubble-cont" v-if="msg.type == 1">
+                      <div class="voice" @click="playVoice(msg.attributes.serverId)">
+                        <i class="voice-gray"> </i>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+              </li>
+
+            </ul>
+
+            <div class="send-area">
+
+              <div class="input-ways">
+
+                <div class="text-input" v-show="inputMode == 0">
+                  <input type="text" v-model="inputMsg"> <button type="button" class="btn btn-gray" @click="sendMsg">发送</button>
+                </div>
               </div>
 
-            </li>
-
-          </ul>
-
-          <div class="send-area">
-
-            <div class="input-ways">
-
-              <div class="text-input" v-show="inputMode == 0">
-                <input type="text" v-model="inputMsg" v-on:keyup.enter="sendMsg"> <button type="button" class="btn btn-gray" @click="sendMsg">发送</button>
-              </div>
             </div>
-
           </div>
         </div>
-      </div>
 
     </div>
 
@@ -80,6 +80,7 @@
 
 import api from 'api'
 import util from '../common/util'
+import Loading from '../components/loading.vue'
 var videojs = require('../../node_modules/video.js/dist/video.min.js')
 require('../../node_modules/video.js/dist/video-js.min.css')
 require('font-awesome/css/font-awesome.css')
@@ -113,6 +114,9 @@ debug(realtime)
 realtime.register(WxAudioMessage)
 
 export default {
+  components: {
+    'loading': Loading
+  },
   data() {
     return {
       liveId: 0,
@@ -130,14 +134,13 @@ export default {
       var params = to.params
       this.liveId = params.liveId
       debug('liveId:' + this.liveId)
-
       this.curUser = util.curUser()
 
-
-      this.$dispatch('loading', true)
+      util.loading(this)
       api.fetchLive(this, this.liveId)
         .then((data) => {
-          this.$dispatch('loading', false)
+          util.loaded(this)
+
           this.live = data
           if (!this.live.canJoin) {
             util.show(this, 'error', '请先报名参与直播')

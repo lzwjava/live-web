@@ -1,17 +1,20 @@
 <template>
   <div class="list-view">
-    <button class="btn btn-blue" @click="createLive"> 创建直播</button>
 
-    <h3>我发起的直播列表</h3>
+    <loading>
+      <button class="btn btn-blue" @click="createLive"> 创建直播</button>
 
-    <ul class="live-list">
-      <li class="live" v-for="live in lives">
-        {{live.subject}}
-        <button class="btn btn-blue subject" @click="edit(live.liveId)">编辑</button>
-        <button class="btn btn-blue subject" @click="manage(live.liveId)">控制</button>
-        <button class="btn btn-blue subject" @click="see(live.liveId)">观看</button>
-      </li>
-    </ul>
+      <h3>我发起的直播列表</h3>
+
+      <ul class="live-list">
+        <li class="live" v-for="live in lives">
+          {{live.subject}}
+          <button class="btn btn-blue subject" @click="edit(live.liveId)">编辑</button>
+          <button class="btn btn-blue subject" @click="manage(live.liveId)">控制</button>
+          <button class="btn btn-blue subject" @click="see(live.liveId)">观看</button>
+        </li>
+      </ul>
+    </loading>
 
 
   </div>
@@ -21,10 +24,12 @@
 <script type="text/javascript">
 
 import util from '../common/util'
+import Loading from '../components/loading.vue'
 
 export default {
   name: 'ListView',
   components: {
+    'loading': Loading
   },
   data() {
     return {
@@ -33,8 +38,10 @@ export default {
   },
   route:{
     data({to}) {
+      util.loading(this)
       this.$http.get('lives/me')
       .then((res) => {
+        util.loaded(this)
         if (util.filterError(this, res)) {
           this.lives = res.data.result
         }
@@ -54,8 +61,10 @@ export default {
       this.$router.go('/lives/' + liveId)
     },
     createLive() {
+      util.loading(this)
       this.$http.post('lives')
       .then((res) => {
+        util.loaded(this)
         if (util.filterError(this, res)) {
           var live = res.data.result
           this.$router.go('/edit/' + live.liveId)

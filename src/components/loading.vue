@@ -16,7 +16,7 @@ export default {
   name: 'loading',
   data () {
     return {
-      loading: true
+      loading: false
     }
   },
   props: [],

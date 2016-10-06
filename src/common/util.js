@@ -81,3 +81,12 @@ exports.timeGap = (ts) => {
   }
   return text
 }
+
+
+exports.loading = (comp) => {
+  comp.$broadcast('loading')
+}
+
+exports.loaded = (comp) => {
+  comp.$broadcast('loaded')
+}

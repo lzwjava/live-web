@@ -109,10 +109,10 @@ export default {
   },
   methods: {
     fetchLive() {
-      this.$broadcast('loading')
+      util.loading(this)
       this.$http.get('lives/' + this.liveId).then((res) => {
         if (util.filterError(this, res)) {
-          this.$broadcast('loaded')
+          util.loaded(this)
           this.setLive(res.data.result)
         }
       }, util.httpErrorFn(this))

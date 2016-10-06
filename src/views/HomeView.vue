@@ -1,8 +1,10 @@
 <template>
 
   <div class="home-view">
-    <div class="big-word">请在微信版直播页点击电脑按钮 <br>扫描二维码登录电脑版</div>
-    <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
+    <loading>
+      <div class="big-word">请在微信版直播页点击电脑按钮 <br>扫描二维码登录电脑版</div>
+      <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
+    </loading>
   </div>
 
 </template>
@@ -10,14 +12,15 @@
 <script>
 
 import util from '../common/util'
+import Loading from '../components/loading.vue'
 
 var debug = require('debug')('HomeView');
 
 export default {
   name: 'HomeView',
   components: {
+    'loading': Loading
   },
-
   data () {
     return {
       code: ''
@@ -55,9 +58,9 @@ export default {
         if (util.filterError(this, res)) {
           var result = res.data.result
           if (result.scanned) {
-            this.$dispatch('loading', true)
+            util.loading(this)
             this.$http.get('self').then((res) => {
-              this.$dispatch('loading', false)
+              util.loaded(this)
               if (util.filterError(this, res)) {
                 this.$dispatch('updateUser', res.data.result)
                 // scanned
