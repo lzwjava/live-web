@@ -2,15 +2,17 @@
 
   <div class="attended-list-view">
 
-    <loading>
-      <h3>我参与的直播列表</h3>
+      <loading>
 
-      <ul class="live-list">
-        <li class="live" v-for="live in attendedLives">
-          <button class="btn btn-blue subject" @click="watch(live.liveId)">{{live.subject}}</button>
-        </li>
-      </ul>
-    </loading>
+        <h3>我参与的直播列表</h3>
+
+        <ul class="live-list">
+          <li class="live" v-for="live in attendedLives">
+            <button class="btn btn-blue subject" @click="watch(live.liveId)">{{live.subject}}</button>
+          </li>
+        </ul>
+
+      </loading>
 
   </div>
 
@@ -33,6 +35,8 @@ export default {
       attendedLives: []
     }
   },
+  created() {
+  },
   ready() {
   },
   route: {
@@ -46,9 +50,6 @@ export default {
         }
       },util.httpErrorFn(this))
     }
-  },
-  components: {
-
   },
   methods: {
     watch(liveId) {
