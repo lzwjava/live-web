@@ -181,6 +181,13 @@
 .markdown-area
   position relative
   padding-top 1em
+  textarea
+    font-size 16px
+    border 1px solid rgba(40,47,49,0.3)
+    opacity 0.8
+    padding 10px
+    &:focus
+      border 1px solid #1CB2EF
   .markdown-preview
     margin-top 15px
     margin-bottom 15px

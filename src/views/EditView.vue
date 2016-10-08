@@ -38,9 +38,16 @@
           </div>
 
           <div class="row">
-            <span class="hint">请输入直播详细介绍(个人简介、直播内容等)</span>
+            <span class="hint">请输入简介来让观众了解您(50字以上即可)</span>
+            <div class="intro-area">
+              <textarea class="form-field form-content" v-model="speakerIntro"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <span class="hint">请输入直播介绍</span>
             <div class="edit-area">
-                <markdown-area class="form-field form-content" :content.sync="content" placeholder="" @submit="saveLive" required></markdown-area>
+                <markdown-area class="form-field form-content" :content.sync="content" placeholder="" required></markdown-area>
                 <p class="tip">支持 Markdown</p>
             </div>
           </div>
@@ -88,6 +95,7 @@ export default {
       coverUrl: '',
       previewUrl: '',
       liveId: 0,
+      speakerIntro: ''
     }
   },
   computed: {
@@ -125,6 +133,7 @@ export default {
       this.myDate = live.planTs
       this.coverUrl = live.coverUrl
       this.previewUrl = live.previewUrl
+      this.speakerIntro = live.speakerIntro
     },
     saveLive() {
       var data = {};
@@ -137,12 +146,13 @@ export default {
       if (this.myDate) {
         data.planTs = this.myDate
       }
+      if (this.speakerIntro) {
+        data.speakerIntro = this.speakerIntro
+      }
       if (this.content) {
         data.detail = this.content
       }
-      if (this.previewUrl) {
-        data.previewUrl = this.previewUrl
-      }
+      data.previewUrl = this.previewUrl
       this.saveLiveData(data)
     },
     saveLiveData(data) {
@@ -273,19 +283,24 @@ export default {
         text-align center
         button
           width 150px
+    .intro-area
+      width 95%
+      textarea
+        width 100%
+        height 50px
+        margin-top 5px
+        font-size 16px
+        border 1px solid rgba(40,47,49,0.3)
+        opacity 0.8
+        padding 10px
+        &:focus
+          border 1px solid #1CB2EF
     .edit-area
       width 95%
       textarea
           width 100%
           height 200px
-          font-size 16px
           margin-top 5px
-          border 1px solid rgba(40,47,49,0.3)
-          font-size 16px
-          opacity 0.8
-          padding 10px
-          &:focus
-            border 1px solid #1CB2EF
       p.tip
         color rgba(40,47,49,.6)
         font-size 13px
