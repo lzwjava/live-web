@@ -2,7 +2,7 @@
 
   <div class="home-view">
     <loading>
-      <div class="big-word">请在微信版直播页点击电脑按钮 <br>扫描二维码登录电脑版</div>
+      <div class="big-word">请点击「对准电脑屏幕扫描」按钮<br>然后扫描二维码登录</div>
       <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
     </loading>
   </div>
