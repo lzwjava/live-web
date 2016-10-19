@@ -2,8 +2,12 @@
 
   <div class="home-view">
     <loading>
-      <div class="big-word">请点击「对准电脑屏幕扫描」按钮<br>然后扫描二维码登录</div>
-      <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" />
+      <!-- <div class="big-word">请点击「对准电脑屏幕扫描」按钮<br>然后扫描二维码登录</div> -->
+
+      <div id="login_container"></div>
+
+      <!-- <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" /> -->
+
     </loading>
   </div>
 
@@ -13,6 +17,7 @@
 
 import util from '../common/util'
 import Loading from '../components/loading.vue'
+import wechat from '../common/wechat'
 
 var debug = require('debug')('HomeView');
 
@@ -39,15 +44,16 @@ export default {
         return
       }
       debug('params:' + params)
-      this.code = this.genCode()
-      this.poll()
+      // this.code = this.genCode()
+      // this.poll()
     }
   },
 
   created () {
-
   },
-
+  ready() {
+    this.initWechatLogin()
+  },
   destroyed () {
   },
   methods: {
@@ -114,8 +120,17 @@ export default {
       return result
     },
     fetchUser() {
-
     },
+    initWechatLogin() {
+      var obj = new WxLogin({
+        id:"login_container",
+        appid: wechat.wechatAppId,
+        scope: 'snsapi_login',
+        redirect_uri: encodeURIComponent('http://quzhiboapp.com/wechat/silentOauth'),
+        state: util.randomString(6),
+        style: 'white'
+      })
+    }
   },
 
   filters: {
@@ -139,5 +154,11 @@ export default {
     margin-top 80px
   img
     width 250px
+  #login_container
+    padding-top 80px
+    width 300px
+    margin 0 auto
+    .title
+        color #fff
 
 </style>

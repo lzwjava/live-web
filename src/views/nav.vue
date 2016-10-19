@@ -46,6 +46,7 @@ import Tip from '../components/tip.vue'
 import DropDown from '../components/dropdown.vue'
 import UserAvatar from '../components/user-avatar.vue'
 import util from '../common/util'
+import wechat from '../common/wechat'
 
 var debug = require('debug')('nav')
 
@@ -83,6 +84,9 @@ export default {
         this.userStatus = true;
         this.user = JSON.parse(window.localStorage.getItem('user'));
       }
+    },
+    wechatLogin() {
+      wechat.oauthLogin()
     }
   },
   created() {

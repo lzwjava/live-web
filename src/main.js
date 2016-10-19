@@ -10,6 +10,7 @@ import ManageView from './views/ManageView.vue'
 import ListView from './views/ListView.vue'
 import LiveView from './views/LiveView.vue'
 import AttendedListView from './views/AttendedListView.vue'
+import WeChatView from './views/WeChatView.vue'
 
 // install router
 Vue.use(Router)
@@ -32,7 +33,7 @@ console.log('env ' + process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   localStorage.debug = ''
 } else {
-  localStorage.debug = 'HomeView,EditView,markdown-area,nav,util,ManageView,api,LiveView,AttendedListView';
+  localStorage.debug = 'HomeView,EditView,markdown-area,nav,util,ManageView,api,LiveView,AttendedListView,WeChatView';
 }
 
 // routing
@@ -56,6 +57,9 @@ router.map({
   },
   '/attendedList': {
     component: AttendedListView
+  },
+  'wechat/:type': {
+    component: WeChatView
   }
 })
 

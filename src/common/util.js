@@ -90,3 +90,17 @@ exports.loading = (comp) => {
 exports.loaded = (comp) => {
   comp.$broadcast('loaded')
 }
+
+function randomString(length) {
+    var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
+function isDebug() {
+  return process.env.NODE_ENV != 'production'
+}
+
+exports.randomString = randomString
+exports.isDebug = isDebug
