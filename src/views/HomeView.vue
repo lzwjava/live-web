@@ -122,11 +122,17 @@ export default {
     fetchUser() {
     },
     initWechatLogin() {
+      var redirectUrl;
+      if (util.isDebug()) {
+        redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauthTest'
+      } else {
+        redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauth'
+      }
       var obj = new WxLogin({
         id:"login_container",
         appid: wechat.wechatAppId,
         scope: 'snsapi_login',
-        redirect_uri: encodeURIComponent('http://quzhiboapp.com/wechat/silentOauth'),
+        redirect_uri: encodeURIComponent(redirectUrl),
         state: util.randomString(6),
         style: 'white'
       })

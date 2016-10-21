@@ -44,7 +44,7 @@ export default {
          }, util.promiseErrorFn(this))
        } else if (params.type == 'silentOauthTest') {
          var url = window.location.href
-         var newUrl = url.replace('quzhiboapp.com', 'localhost:9060')
+         var newUrl = url.replace('quzhiboapp.com', 'localhost:9090')
          newUrl = newUrl.replace('silentOauthTest', 'silentOauth')
          window.location = newUrl
        }
