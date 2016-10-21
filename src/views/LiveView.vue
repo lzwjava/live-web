@@ -325,7 +325,39 @@ export default {
       }).then((conv) => {
         this.inputMsg = '进入了房间'
         this.sendMsg()
+
+        this.initScroll()
       }).catch(this.handleError)
+    },
+    initScroll() {
+      setTimeout(() => {
+        var msgList = this.$els.msgList
+        var messageIterator = this.conv.createMessagesIterator({ limit: 30 })
+        msgList.addEventListener('scroll', (e) => {
+          var list = e.srcElement
+          debug('scroolListener')
+          if (list.scrollTop == 0) {
+            debug('top')
+            util.loading(this)
+            messageIterator.next().then((result) => {
+              util.loaded(this)
+              if (result.done) {
+                util.show(this, 'warn', '没有更多消息了')
+              } else {
+                var originHeight = msgList.scrollHeight
+                this.msgs = result.value.concat(this.msgs)
+                setTimeout(() => {
+                  var afterHeight = msgList.scrollHeight
+                  msgList.scrollTop = afterHeight-originHeight
+                }, 0)
+              }
+            }, (error) => {
+              util.loaded(this)
+              util.show(this, 'error', error)
+            })
+          }
+        })
+      }, 0)
     },
   }
 }
