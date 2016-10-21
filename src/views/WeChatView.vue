@@ -36,11 +36,12 @@ export default {
       var state = query.state
       if (params.type == 'silentOauth') {
         util.loading(this)
-        http.get(this, 'wechat/silentOauth', {code: code})
+        http.get(this, 'wechat/webOauth', {code: code})
          .then((data) => {
            util.loaded(this)
-           this.$router.go('/mylist')
-         }, errorFn)
+           this.$dispatch('updateUser', data)
+           this.$router.go('/attendedList')
+         }, util.promiseErrorFn(this))
        } else if (params.type == 'silentOauthTest') {
          var url = window.location.href
          var newUrl = url.replace('quzhiboapp.com', 'localhost:9060')
