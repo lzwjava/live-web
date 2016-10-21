@@ -347,14 +347,12 @@ export default {
   min-height 700px
   text-align center
   .left-panel
-    width 700px
-    margin-left 200px
+    width 60%
+    margin-left 10%
     float left
-    +below(1200px)
-      margin-left 0px
     .player-area
-      width 700px
-      height 500px
+      width 100%
+      height 100%
       margin 0 auto
       position relative
       background-color #383838
@@ -405,11 +403,9 @@ export default {
     font-size 15px
     padding 5px 10px
   .right-panel
-    width 300px
-    margin-left 950px
+    width 320px
+    margin-left 72%
     position relative
-    +below(1200px)
-      margin-left 750px
     .chat-area
       padding 5px
       width 100%
