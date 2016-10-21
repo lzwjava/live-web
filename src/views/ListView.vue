@@ -11,7 +11,6 @@
           {{live.subject}}
           <button class="btn btn-blue subject" @click="edit(live.liveId)">编辑</button>
           <button class="btn btn-blue subject" @click="manage(live.liveId)">控制</button>
-          <button class="btn btn-blue subject" @click="see(live.liveId)">观看</button>
         </li>
       </ul>
     </loading>
@@ -56,9 +55,6 @@ export default {
     },
     manage(liveId) {
       this.$router.go('/manage/' + liveId)
-    },
-    see(liveId) {
-      this.$router.go('/lives/' + liveId)
     },
     createLive() {
       util.loading(this)

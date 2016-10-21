@@ -19,7 +19,10 @@
 
       <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
+
       <button class="btn btn-blue" @click="notifyLive">群发开播短信</button>
+
+      <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
       <button class="btn btn-blue" @click="endLive">结束直播</button>
 
@@ -121,6 +124,9 @@ export default {
             }
           },util.httpErrorFn(this))
       }
+    },
+    see(liveId) {
+      this.$router.go('/lives/' + liveId)
     }
   }
 }

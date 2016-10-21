@@ -33,9 +33,9 @@ exports.httpErrorFn = (component) => {
   }
 };
 
-exports.show = (component, type, text, duration) => {
+var show = (component, type, text, duration) => {
   component.$dispatch('show-msg', type, text)
-};
+}
 
 exports.promiseErrorFn = (comp, callback) => {
   return (error) => {
@@ -104,3 +104,4 @@ function isDebug() {
 
 exports.randomString = randomString
 exports.isDebug = isDebug
+exports.show = show

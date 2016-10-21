@@ -63,7 +63,7 @@
 		.qrcode
 			width 320px
 			height 400px
-			background url("../img/QRCode@2x.jpg") no-repeat
+			background url("../img/lzwjava_qrcode.jpg") no-repeat
 			background-size contain
 			margin-top 10px
 			margin 0 auto

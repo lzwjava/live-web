@@ -15,6 +15,11 @@
         <ul class="list">
           <a href="."><li class="hover-btn">首页</li></a>
 
+          <template v-if="userStatus">
+              <a href="#/mylist"><li  class="hover-btn">发起的直播</li></a>
+              <a href="#/attendedList"><li class="hover-btn">参与的直播</li></a>
+          </template>
+
           <li v-if="userStatus">
             <dropdown>
               <div class="dropdown-anchor" slot="showText">
@@ -23,9 +28,6 @@
               <div slot="options">
                 <user-avatar :user="user"></user-avatar>
                 <div class="name">{{user.username}}</div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#/mylist">我发起的直播</a>
-                <a class="dropdown-item" href="#/attendedList">我参与的直播</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" @click="logout" href="/">注销</a>
               </div>
