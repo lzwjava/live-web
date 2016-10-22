@@ -323,8 +323,12 @@ export default {
         }
         return this.conv.join()
       }).then((conv) => {
-        // this.inputMsg = '进入了房间'
-        // this.sendMsg()
+        this.inputMsg = '进入了房间'
+        this.sendMsg()
+
+        conv.count().then((membersCount) => {
+          console.log('count:' + membersCount);
+        })
 
         this.initScroll()
       }).catch(this.handleError)
