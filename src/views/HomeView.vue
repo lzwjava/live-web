@@ -40,7 +40,7 @@ export default {
 
       var params = this.$route.query;
       if (params.sessionToken) {
-        this.loginBySessionToken(params.sessionToken)
+        this.loginBySessionToken(params.sessionToken, params.liveId)
         return
       }
       debug('params:' + params)
@@ -88,7 +88,7 @@ export default {
         }
       })
     },
-    loginBySessionToken: function (sessionToken) {
+    loginBySessionToken: function (sessionToken, liveId) {
       this.$http.get('self', {
         sessionToken: sessionToken
       }).then((resp) => {
@@ -96,8 +96,13 @@ export default {
           var token = resp.data.result.sessionToken
           debug('token:' + token)
           document.cookie = "SessionToken=" + token
-          this.$dispatch('updateUser', res.data.result)
-          this.$router.go('/attendedList')
+          this.$dispatch('updateUser', resp.data.result)
+
+          if (liveId) {
+            this.$router.go('/lives/' + liveId)
+          } else {
+            this.$router.go('/attendedList')
+          }
         }
       }, util.httpErrorFn(this));
     },
