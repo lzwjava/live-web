@@ -15,8 +15,10 @@
         <ul class="list">
           <a href="."><li class="hover-btn">首页</li></a>
 
+          <a href="http://m.quzhiboapp.com/#!/lives"><li class="hover-btn">最新直播</li></a>
+
           <template v-if="userStatus">
-              <a href="#/mylist"><li  class="hover-btn">发起的直播</li></a>
+              <a href="#/mylist"><li  class="hover-btn">我的直播</li></a>
               <a href="#/attendedList"><li class="hover-btn">参与的直播</li></a>
           </template>
 
