@@ -47,6 +47,14 @@ export default {
          var newUrl = url.replace('quzhiboapp.com', 'localhost:9090')
          newUrl = newUrl.replace('silentOauthTest', 'silentOauth')
          window.location = newUrl
+       } else if (params.type == 'webOauth') {
+         var url = window.location.href
+         var newUrl = url.replace('quzhiboapp.com', 'm.quzhiboapp.com')
+         window.location = newUrl
+       } else if (params.type == 'webOauthTest') {
+         var url = window.location.href
+         var newUrl = url.replace('quzhiboapp.com', 'm.quzhiboapp.com')
+         window.location = newUrl
        }
     }
   }
