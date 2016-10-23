@@ -96,15 +96,8 @@ export default {
           var token = resp.data.result.sessionToken
           debug('token:' + token)
           document.cookie = "SessionToken=" + token
-
-          this.$dispatch('loading', true)
-          this.$http.get('self').then((res) => {
-            this.$dispatch('loading', false)
-            if (util.filterError(this, res)) {
-              this.$dispatch('updateUser', res.data.result)
-              this.$router.go('/mylist')
-            }
-          }, util.httpErrorFn(this))
+          this.$dispatch('updateUser', res.data.result)
+          this.$router.go('/attendedList')
         }
       }, util.httpErrorFn(this));
     },
