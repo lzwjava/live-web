@@ -137,7 +137,8 @@ export default {
       msgs:[],
       client: {},
       conv: {},
-      inputMsg: ''
+      inputMsg: '',
+      messageIterator: null
     }
   },
   route: {
@@ -245,10 +246,13 @@ export default {
       this.msgs.push(msg)
       setTimeout(() => {
         if (isTouchBottom) {
-          var msgList = this.$els.msgList
-          msgList.scrollTop = msgList.scrollHeight
+          this.scrollToBottom()
         }
       },0)
+    },
+    scrollToBottom() {
+      var msgList = this.$els.msgList
+      msgList.scrollTop = msgList.scrollHeight
     },
     addAudioMsg(msg) {
       this.addMsg(msg)
@@ -334,12 +338,13 @@ export default {
         }
         this.conv = conv
         this.addSystemMsg('正在加载聊天记录...')
-        return this.conv.queryMessages({
-          limit:30
-        })
-      }).then((msgs)=> {
-        for(var i = 0; i < msgs.length; i++) {
-          this.addMsg(msgs[i])
+        var messageIterator = this.conv.createMessagesIterator({ limit: 30 })
+        this.messageIterator = messageIterator
+        return messageIterator.next()
+      }).then((result)=> {
+        if (result.done) {
+        } else {
+          this.msgs = this.msgs.concat(result.value)
         }
         return this.conv.join()
       }).then((conv) => {
@@ -350,20 +355,21 @@ export default {
           console.log('count:' + membersCount);
         })
 
+        this.scrollToBottom()
+
         this.initScroll()
       }).catch(this.handleError)
     },
     initScroll() {
       setTimeout(() => {
         var msgList = this.$els.msgList
-        var messageIterator = this.conv.createMessagesIterator({ limit: 30 })
         msgList.addEventListener('scroll', (e) => {
           var list = e.srcElement
           debug('scroolListener')
           if (list.scrollTop == 0) {
             debug('top')
             util.loading(this)
-            messageIterator.next().then((result) => {
+            this.messageIterator.next().then((result) => {
               util.loaded(this)
               if (result.done) {
                 util.show(this, 'warn', '没有更多消息了')
