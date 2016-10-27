@@ -20,7 +20,9 @@
       <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
 
-      <button class="btn btn-blue" @click="notifyLive">群发开播短信</button>
+      <button class="btn btn-blue" @click="notifyLive">群发短信开播通知</button>
+
+      <button class="btn btn-blue" @click="notifyLiveByWeChat">群发微信开播通知</button>
 
       <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
@@ -115,15 +117,24 @@ export default {
         },util.httpErrorFn(this))
     },
     notifyLive() {
-      if (confirm('真的要群发通知短信吗?')) {
-        this.$http.get('lives/' + this.liveId +'/notify')
-          .then((res) => {
-            if (util.filterError(this, res)) {
-              var result = res.data.result
-              util.show(this, 'success', '发送短信结果: ' + result.succeedCount + '/' +result.total)
-            }
-          },util.httpErrorFn(this))
+      if (confirm('真的要群发短信通知吗?')) {
+        this.notifyLiveWithType('sms')
       }
+    },
+    notifyLiveByWeChat() {
+      if (confirm('真的要群发微信通知吗?')) {
+        this.notifyLiveWithType('wechat')
+      }
+    },
+    notifyLiveWithType(type) {
+      this.$http.get('lives/' + this.liveId +'/notify', {
+        type: type
+      }).then((res) => {
+          if (util.filterError(this, res)) {
+            var result = res.data.result
+            util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
+          }
+        },util.httpErrorFn(this))
     },
     see(liveId) {
       this.$router.go('/lives/' + liveId)
