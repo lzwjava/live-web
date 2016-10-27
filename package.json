@@ -51,6 +51,7 @@
     "highlight.js": "^9.6.0",
     "html-webpack-plugin": "^2.22.0",
     "inherit": "^2.2.6",
+    "json-loader": "^0.5.4",
     "leancloud-realtime": "^3.2.3",
     "marked": "^0.3.6",
     "moment": "^2.15.1",
