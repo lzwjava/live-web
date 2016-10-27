@@ -4,10 +4,6 @@
     <p class="status">当前直播状态:{{statusText}}</p>
 
     <p>
-      记得要在 OBS 中录制视频
-    </p>
-
-    <p>
       请在 OBS 软件设置:
       <br>
       1)直播地址(URL): {{pushPrefix}}
