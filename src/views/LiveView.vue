@@ -347,7 +347,17 @@ export default {
       }).then((conv) => {
 
         if (!util.isDebug()) {
-          this.sendSystemMsg(this.curUser.username + '进入了房间')
+          var needSendIntoRoom = true;
+          if (this.msgs.length > 0) {
+            var lastMsg = this.msgs[this.msgs.length - 1]
+            if (lastMsg.type == SystemMessageType &&
+              lastMsg.from == this.client.id) {
+                needSendIntoRoom = false
+            }
+          }
+          if (needSendIntoRoom) {
+            this.sendSystemMsg(this.curUser.username + '进入了房间')
+          }
         }
 
         conv.count().then((membersCount) => {
