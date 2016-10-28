@@ -345,7 +345,6 @@ export default {
         this.msgs = this.msgs.concat(result.value)
         return this.conv.join()
       }).then((conv) => {
-
         if (!util.isDebug()) {
           var needSendIntoRoom = true;
           if (this.msgs.length > 0) {
@@ -354,6 +353,9 @@ export default {
               lastMsg.from == this.client.id) {
                 needSendIntoRoom = false
             }
+          }
+          if (this.live.status == 30) {
+            needSendIntoRoom = false
           }
           if (needSendIntoRoom) {
             this.sendSystemMsg(this.curUser.username + '进入了房间')
