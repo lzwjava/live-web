@@ -376,9 +376,7 @@ export default {
         var msgList = this.$els.msgList
         msgList.addEventListener('scroll', (e) => {
           var list = e.srcElement
-          debug('scroolListener')
           if (list.scrollTop == 0) {
-            debug('top')
             util.loading(this)
             this.messageIterator.next().then((result) => {
               util.loaded(this)
