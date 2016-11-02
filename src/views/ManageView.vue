@@ -3,10 +3,13 @@
 
     <p class="status">当前直播状态:{{statusText}}</p>
 
-    <p>
+    <p class="obs-setting">
       请在 OBS 软件设置:
       <br>
       1)直播地址(URL): {{pushPrefix}}
+      <br>
+      1.1)如果是在海外，则设为：{{foreignPrefix}}
+      <br>
       <br>
       2)流密钥(Streaming Key): {{pushKey}}
     </p>
@@ -43,6 +46,9 @@
 <script type="text/javascript">
 
 import util from '../common/util'
+import debugFn from 'debug'
+
+const debug = debugFn('ManageView')
 
 export default {
   name: 'ManageView',
@@ -60,12 +66,10 @@ export default {
       return 'http://m.quzhiboapp.com/?liveId=' + this.live.liveId
     },
     pushPrefix() {
-      if (!this.live.pushUrl) {
-        return ''
-      }
-      var regex = /(rtmp:\/\/.*)\/(.*)/g
-      var match = regex.exec(this.live.pushUrl)
-      return match[1]
+      return this.urlPrefix(this.live.pushUrl)
+    },
+    foreignPrefix() {
+      return this.urlPrefix(this.live.foreignPushUrl)
     },
     pushKey() {
       if (!this.live.pushUrl) {
@@ -86,6 +90,15 @@ export default {
   created() {
   },
   methods: {
+    urlPrefix(rtmpUrl) {
+      debug('rtmpUrl:%j', rtmpUrl)
+      if (!rtmpUrl) {
+        return ''
+      }
+      var regex = /(rtmp:\/\/.*)\/(.*)/g
+      var match = regex.exec(rtmpUrl)
+      return match[1]
+    },
     fetchLive() {
       this.$http.get('lives/' + this.liveId)
         .then((res) => {
@@ -152,5 +165,7 @@ export default {
     margin-right 50px
   .control-btn
     margin-top 50px
+  .obs-setting
+    font-size 16px
 
 </style>
