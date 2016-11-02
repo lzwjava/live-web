@@ -1,6 +1,7 @@
 var debug = require('debug')('util');
 
-import moment from 'moment'
+
+import moment from 'moment-timezone'
 moment.locale('zh-cn')
 
 exports.filterError = (component, res) => {
@@ -74,7 +75,7 @@ exports.randomString = (length) => {
 }
 
 exports.timeGap = (ts) => {
-  var text = moment(ts, "YYYY-MM-DD hh:mm::ss").fromNow()
+  var text = moment.tz(ts, "YYYY-MM-DD hh:mm::ss", 'Asia/Shanghai').fromNow()
   if (text) {
     text = text.replace(/[\u5185]/g, '后')
     text = text.replace(' ', '')
@@ -82,6 +83,13 @@ exports.timeGap = (ts) => {
   return text
 }
 
+exports.timeDuration = (ts) => {
+  var text = moment.tz(ts, "YYYY-MM-DD hh:mm::ss", 'Asia/Shanghai').fromNow(true)
+  if (text) {
+    text = text.replace(' ', '')
+  }
+  return text
+}
 
 exports.loading = (comp) => {
   comp.$broadcast('loading')
