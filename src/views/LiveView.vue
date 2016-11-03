@@ -70,7 +70,8 @@
               <div class="input-ways">
 
                 <div class="text-input" v-show="inputMode == 0">
-                  <input type="text" v-model="inputMsg"> <button type="button" class="btn btn-gray" @click="sendMsg">发送</button>
+                  <input type="text" v-model="inputMsg" @keydown.enter="sendMsg"> <button type="button" class="btn btn-gray"
+                  @click="sendMsg">发送</button>
                 </div>
               </div>
 
