@@ -38,7 +38,7 @@
 
               <li class="msg" v-for="msg in msgs">
 
-                <div class="system-msg" v-if="msg.type == 2">
+                <div class="system-msg" v-if="msg.type == 2 && live.status != 30">
                   <div class="content">{{msg.text}}</div>
                 </div>
 
@@ -307,7 +307,8 @@ export default {
           this.addChatMsg(message)
         } else if (message.type == WxAudioType) {
           this.addAudioMsg(message)
-        } else {
+        } else if (message.type == SystemMessageType){
+          this.addChatMsg(message)
         }
       })
       this.client.on('reuse', () => {
