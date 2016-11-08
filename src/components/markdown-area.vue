@@ -25,6 +25,7 @@
   require('moxie');
   require('plupload'); // use for Qiniu js sdk
   import Qiniu from 'qiniu-js-sdk'
+  import {sprintf} from 'sprintf-js'
 
   module.exports = {
     components: {
@@ -154,10 +155,9 @@
                            var res = JSON.parse(info);
                            var sourceLink = bucketUrl + '/' + res.key;
                            debug('sourceLink: %j', sourceLink);
-                           component.insertLink('![](' + sourceLink + ')\n')
+                           component.insertLink(sprintf('![%s](%s)\n', file.name, sourceLink))
                     },
                     'Error': function(up, err, errTip) {
-                           debug('qiniu error %j errTip %j', err, errTip);
                            util.show(component, 'error', errTip)
                     },
                     'UploadComplete': function() {
