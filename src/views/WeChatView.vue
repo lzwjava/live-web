@@ -2,6 +2,8 @@
 
   <div class="wechat-view">
 
+    <loading></loading>
+
   </div>
 
 </template>
@@ -11,12 +13,14 @@
 import debugFn from 'debug'
 import util from '../common/util'
 import http from 'api'
+import Loading from '../components/loading.vue'
 
 var debug = debugFn('WeChatView')
 
 export default {
   name: 'WeChatView',
   components: {
+    'loading': Loading
   },
   data() {
     return {
@@ -63,5 +67,8 @@ export default {
 </script>
 
 <style media="screen" lang="stylus">
+
+.wechat-view
+  min-height 500px
 
 </style>
