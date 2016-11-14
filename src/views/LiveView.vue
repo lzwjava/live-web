@@ -30,6 +30,15 @@
             </div>
           </div>
 
+          <div class="playlist-area" v-if="videos.length > 1">
+            <p>
+              播放列表
+            </p>
+            <cells type="split">
+              <select-cell :options="videoOptions" :selected.sync="videoSelected"></select-cell>
+            </cells>
+          </div>
+
         </div>
 
         <div class="right-panel">
@@ -88,6 +97,8 @@
 import api from 'api'
 import util from '../common/util'
 import Loading from '../components/loading.vue'
+import {Toast, SelectCell, Cells} from 'vue-weui'
+
 var videojs = require('../../node_modules/video.js/dist/video.min.js')
 require('../../node_modules/video.js/dist/video-js.min.css')
 require('font-awesome/css/font-awesome.css')
@@ -127,7 +138,9 @@ realtime.register(SystemMessage)
 
 export default {
   components: {
-    'loading': Loading
+    'loading': Loading,
+    SelectCell,
+    Cells
   },
   data() {
     return {
@@ -139,7 +152,9 @@ export default {
       client: {},
       conv: {},
       inputMsg: '',
-      messageIterator: null
+      messageIterator: null,
+      videoSelected: 0,
+      videos: []
     }
   },
   route: {
@@ -150,21 +165,22 @@ export default {
       this.curUser = util.curUser()
 
       util.loading(this)
-      api.fetchLive(this, this.liveId)
-        .then((data) => {
-          util.loaded(this)
+      Promise.all([
+        api.fetchLive(this, this.liveId),
+        api.fetchVideos(this, this.liveId)
+      ]).then(values => {
+        util.loaded(this)
+        this.live = values[0]
+        this.videos = values[1]
+        if (!this.live.canJoin) {
+          util.show(this, 'error', '请先报名参与直播')
+          return
+        }
 
-          this.live = data
-          if (!this.live.canJoin) {
-            util.show(this, 'error', '请先报名参与直播')
-            return
-          }
-          this.openClient()
-          debug('openClient')
-
-          this.playVideo()
-
-        }).catch(util.promiseErrorFn)
+        this.openClient()
+        debug('openClient')
+        this.playVideo()
+      }).catch(util.promiseErrorFn)
     }
   },
   created() {
@@ -174,6 +190,26 @@ export default {
   computed: {
     timeDuration () {
       return util.timeDuration(this.live.planTs)
+    },
+    videoOptions() {
+      var options = [];
+      for(var i = 0; i < this.videos.length; i++) {
+        var video = this.videos[i]
+        options.push({text: video.title, value: i})
+      }
+      return options
+    },
+    optionHeight() {
+      if (this.videos.length > 1) {
+        return 50
+      } else {
+        return 0
+      }
+    }
+  },
+  watch: {
+    videoSelected: function(val, oldVal) {
+      this.changeSource(this.videos[this.videoSelected].url)
     }
   },
   methods: {
@@ -200,7 +236,7 @@ export default {
       		sources: [
             {
               type: 'video/mp4',
-              src: this.live.videoUrl
+              src: this.videos[this.videoSelected].url
             }
           ]
       	})
@@ -422,6 +458,9 @@ export default {
     width 60%
     margin-left 10%
     float left
+    .playlist-area
+      margin-top 20px
+      font-size 16px
     .player-area
       width 100%
       min-height 500px
@@ -482,7 +521,7 @@ export default {
       padding 5px
       width 100%
       height 500px
-      margin-top 100px
+      margin-top 70px
       position relative
       background-color #eee
       tex-align left

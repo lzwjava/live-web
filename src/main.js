@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Ajax from 'vue-resource'
 
+require('weui')
+
 import filters from './filters'
 import App from './views/App.vue'
 import HomeView from './views/HomeView.vue'
