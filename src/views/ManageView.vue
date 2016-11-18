@@ -25,7 +25,9 @@
 
       <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
-      <button class="btn btn-blue" @click="endLive">结束直播</button>
+      <button class="btn btn-blue" @click="endLive">转码直播</button>
+
+      <button class="btn btn-blue" @click="finishLive">结束直播</button>
 
     </div>
 
@@ -118,6 +120,15 @@ export default {
     },
     endLive() {
       this.$http.get('lives/' + this.liveId +'/end')
+        .then((res) => {
+          if (util.filterError(this, res)) {
+            util.show(this, 'success', '已设定为转码')
+            this.fetchLive()
+          }
+        },util.httpErrorFn(this))
+    },
+    finishLive() {
+      this.$http.get('lives/' + this.liveId +'/finish')
         .then((res) => {
           if (util.filterError(this, res)) {
             util.show(this, 'success', '成功结束直播')

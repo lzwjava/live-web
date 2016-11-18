@@ -14,6 +14,11 @@
             </div>
           </div>
 
+          <div class="row need-pay-row">
+            <span class="hint">是否需要付费</span>
+            <input type="checkbox" v-model="needPay" name="needPay" value="0">
+          </div>
+
           <div class="row">
             <span class="hint">请设定直播门票</span>
             <input type="number" v-model="amount" class="input-amount"> <span class="suffix">¥<span>
@@ -95,7 +100,8 @@ export default {
       coverUrl: '',
       previewUrl: '',
       liveId: 0,
-      speakerIntro: ''
+      speakerIntro: '',
+      needPay: 0
     }
   },
   computed: {
@@ -134,6 +140,7 @@ export default {
       this.coverUrl = live.coverUrl
       this.previewUrl = live.previewUrl
       this.speakerIntro = live.speakerIntro
+      this.needPay = live.needPay
     },
     saveLive() {
       var data = {};
@@ -153,6 +160,11 @@ export default {
         data.detail = this.content
       }
       data.previewUrl = this.previewUrl
+      if (this.needPay) {
+        data.needPay = 1
+      } else {
+        data.needPay = 0
+      }
       this.saveLiveData(data)
     },
     saveLiveData(data) {
@@ -256,6 +268,11 @@ export default {
     -webkit-box-shadow 0px 1px 0px rgba(255,255,255,0.15) inset, 0px 1px 2px rgba(0,0,0,0.15)
     .row
       margin 10px 0
+      &.need-pay-row
+        .hint
+          display inline-block
+        input
+          margin-left 10px
       .hint
         color rgba(40,47,49,0.6)
         display block
