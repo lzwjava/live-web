@@ -61,6 +61,11 @@
                           <pre class="text">{{msg.text}}</pre>
                         </div>
                       </div>
+                      <div class="text-content bubble-cont" v-if="msg.type == 3">
+                        <div class="plain">
+                          <pre class="text reward-text">{{msg.text}}</pre>
+                        </div>
+                      </div>
                       <div class="audio-content bubble-cont" v-if="msg.type == 1">
                         <div class="voice" @click="playVoice(msg.attributes.serverId)">
                           <i class="voice-gray"> </i>
@@ -121,6 +126,10 @@ export const SystemMessage = inherit(TypedMessage)
 var SystemMessageType = 2
 messageType(SystemMessageType)(SystemMessage)
 
+export const RewardMessage = inherit(TypedMessage)
+var RewardMessageType = 3
+messageType(RewardMessageType)(RewardMessage)
+
 var prodAppId = 's83aTX5nigX1KYu9fjaBTxIa-gzGzoHsz'
 var testAppId = 'YY3S7uNlnXUgX48BHTJlJx4i-gzGzoHsz'
 
@@ -135,6 +144,7 @@ debug(realtime)
 
 realtime.register(WxAudioMessage)
 realtime.register(SystemMessage)
+realtime.register(RewardMessage)
 
 export default {
   components: {
@@ -346,6 +356,10 @@ export default {
           this.addAudioMsg(message)
         } else if (message.type == SystemMessageType){
           this.addChatMsg(message)
+        } else if (message.type == RewardMessageType) {
+          this.addChatMsg(message)
+        } else {
+          this.addSystemMsg('此消息暂不支持显示')
         }
       })
       this.client.on('reuse', () => {
@@ -592,6 +606,8 @@ export default {
                       word-wrap break-word
                       word-break normal
                       white-space pre-wrap
+                    .reward-text
+                      color #d65239
       .send-area
         box-sizing border-box
         padding-top 3px
