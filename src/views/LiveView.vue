@@ -239,6 +239,16 @@ export default {
         		}
           ]
       	})
+
+        var events = ['abort', 'canplay', 'canplaythrough', 'durationchange', 'emptied', 'loadeddata',
+        'loadeddata', 'loadstart', 'pause', 'play', 'playing','ratechange', 'seeked', 'seeking', 'stalled',
+          'suspend', 'waiting','timeupdate', 'volumechange', 'error']
+          for (var i = 0; i < events.length; i++) {
+            var name = events[i]
+            player.one(name, videojs.bind(player, function(event) {
+              console.log(event.type)
+            }));
+          }
       } else if (this.live.status == 30) {
         player = videojs('my_video_1', {
       		techOrder: ['html5', 'flash'],
