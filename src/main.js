@@ -30,8 +30,6 @@ Vue.http.options.root = '/api';
 Vue.http.options.emulateJSON = true;
 Vue.http.options.timeout = 1000 * 10;
 
-console.log('env ' + process.env.NODE_ENV)
-
 if (process.env.NODE_ENV === 'production') {
   localStorage.debug = ''
 } else {
