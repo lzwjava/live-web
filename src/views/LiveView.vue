@@ -164,7 +164,9 @@ export default {
       inputMsg: '',
       messageIterator: null,
       videoSelected: 0,
-      videos: []
+      videos: [],
+      endIntervalId: 0,
+      liveViewId: 0
     }
   },
   route: {
@@ -190,12 +192,30 @@ export default {
         this.openClient()
         debug('openClient')
         this.playVideo()
+
+        this.startLiveView(this.live)
+
+        this.endInterval()
+
+        debug('begin interval: %j', new Date())
+
+        this.endIntervalId = setInterval(() => {
+          this.endLiveView()
+        }, 1000 * 30)
+
+        debug('intervalId: %j', this.endIntervalId)
+
       }).catch(util.promiseErrorFn)
     }
   },
   created() {
   },
   ready() {
+  },
+  detached() {
+    debug('detached')
+    this.endLiveView()
+    this.endInterval()
   },
   computed: {
     timeDuration () {
@@ -459,6 +479,32 @@ export default {
         })
       }, 0)
     },
+    startLiveView(live) {
+      api.post(this, 'liveViews', {
+        liveId: live.liveId,
+        platform: 'pc',
+        liveStatus: live.status
+      }).then((data) => {
+        this.liveViewId = data.liveViewId
+      }, util.promiseErrorFn(this))
+    },
+    endLiveView() {
+      if (this.liveViewId != 0) {
+        api.get(this, 'liveViews/' + this.liveViewId + '/end')
+        .then((resp) => {
+        }, (error) => {
+          debug('end error:%j', error);
+        })
+      } else {
+        debug('liveViewId == 0, do not end')
+      }
+    },
+    endInterval() {
+      if (this.endIntervalId != 0) {
+        clearInterval(this.endIntervalId)
+        this.endIntervalId =0
+      }
+    }
   }
 }
 
