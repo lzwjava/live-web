@@ -18,6 +18,7 @@
 
       <button class="btn btn-blue" @click="beginLive">开始直播</button>
 
+      <button class="btn btn-blue" @click="waitLive">设置回报名状态</button>
 
       <button class="btn btn-blue" @click="notifyLive">群发短信开播通知</button>
 
@@ -25,10 +26,16 @@
 
       <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
+    </div>
+
+    <div class="control-btn">
       <button class="btn btn-blue" @click="endLive">转码直播</button>
 
-      <button class="btn btn-blue" @click="finishLive">结束直播</button>
+      <button class="btn btn-blue" @click="convertLive">开始转码</button>
 
+      <button class="btn btn-blue" @click="replayLive">开始重播</button>
+
+      <button class="btn btn-blue" @click="finishLive">结束直播</button>
     </div>
 
 
@@ -48,6 +55,7 @@
 <script type="text/javascript">
 
 import util from '../common/util'
+import api from '../common/api'
 import debugFn from 'debug'
 
 const debug = debugFn('ManageView')
@@ -93,7 +101,6 @@ export default {
   },
   methods: {
     urlPrefix(rtmpUrl) {
-      debug('rtmpUrl:%j', rtmpUrl)
       if (!rtmpUrl) {
         return ''
       }
@@ -102,39 +109,52 @@ export default {
       return match[1]
     },
     fetchLive() {
-      this.$http.get('lives/' + this.liveId)
-        .then((res) => {
-          if (util.filterError(this, res)) {
-            this.live = res.data.result
-          }
-        },util.httpErrorFn(this))
+      api.get(this, 'lives/' + this.liveId)
+      .then((data) => {
+        this.live = data
+      }, util.promiseErrorFn(this))
     },
     beginLive() {
-      this.$http.get('lives/' + this.liveId +'/begin')
-        .then((res) => {
-          if (util.filterError(this, res)) {
-            util.show(this, 'success', '成功开启直播')
-            this.fetchLive()
-          }
-        },util.httpErrorFn(this))
+      api.get(this, 'lives/' + this.liveId +'/begin')
+       .then((data) => {
+         util.show(this, 'success', '成功开启直播')
+         this.fetchLive()
+       }, util.promiseErrorFn(this))
+    },
+    waitLive() {
+      api.get(this, 'lives/' + this.liveId +'/wait')
+      .then((data) => {
+        util.show(this, 'success', '成功设置回报名状态')
+        this.fetchLive()
+      }, util.promiseErrorFn(this))
     },
     endLive() {
-      this.$http.get('lives/' + this.liveId +'/end')
-        .then((res) => {
-          if (util.filterError(this, res)) {
-            util.show(this, 'success', '已设定为转码')
-            this.fetchLive()
-          }
-        },util.httpErrorFn(this))
+      api.get(this, 'lives/' + this.liveId +'/end')
+      .then((data) => {
+        util.show(this, 'success', '已设定为转码')
+        this.fetchLive()
+      }, util.promiseErrorFn(this))
     },
     finishLive() {
-      this.$http.get('lives/' + this.liveId +'/finish')
-        .then((res) => {
-          if (util.filterError(this, res)) {
-            util.show(this, 'success', '成功结束直播')
-            this.fetchLive()
-          }
-        },util.httpErrorFn(this))
+      api.get(this, 'lives/' + this.liveId +'/finish')
+      .then((data) => {
+        util.show(this, 'success', '成功结束直播')
+        this.fetchLive()
+      }, util.promiseErrorFn(this))
+    },
+    convertLive() {
+      api.get(this, 'recordedVideos/convert', {
+        liveId: this.liveId
+      }).then((data) => {
+      }, util.promiseErrorFn(this))
+      util.show(this, 'success', '已经发起转码');
+    },
+    replayLive() {
+      api.get(this, 'recordedVideos/replay', {
+        liveId: this.liveId
+      }).then((data) => {
+      }, util.promiseErrorFn(this))
+      util.show(this, 'success', '已经发起重播');
     },
     notifyLive() {
       if (confirm('真的要群发短信通知吗?')) {
@@ -147,14 +167,12 @@ export default {
       }
     },
     notifyLiveWithType(type) {
-      this.$http.get('lives/' + this.liveId +'/notify', {
+      api.get(this, 'lives/' + this.liveId +'/notify', {
         type: type
-      }).then((res) => {
-          if (util.filterError(this, res)) {
-            var result = res.data.result
-            util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
-          }
-        },util.httpErrorFn(this))
+      }).then((data) => {
+        var result = data
+        util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
+      }, util.promiseErrorFn(this))
     },
     see(liveId) {
       this.$router.go('/lives/' + liveId)
@@ -172,8 +190,8 @@ export default {
   p.status
     font-size 24px
   button
-    margin-left 50px
-    margin-right 50px
+    margin-left 30px
+    margin-right 30px
   .control-btn
     margin-top 50px
   .obs-setting

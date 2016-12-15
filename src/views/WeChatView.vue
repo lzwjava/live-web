@@ -12,7 +12,7 @@
 
 import debugFn from 'debug'
 import util from '../common/util'
-import http from 'api'
+import http from '../common/api'
 import Loading from '../components/loading.vue'
 
 var debug = debugFn('WeChatView')

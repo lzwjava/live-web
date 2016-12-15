@@ -99,7 +99,7 @@
 
 <script type="text/javascript">
 
-import api from 'api'
+import api from '../common/api'
 import util from '../common/util'
 import Loading from '../components/loading.vue'
 import {Toast, SelectCell, Cells} from 'vue-weui'
@@ -250,7 +250,7 @@ export default {
       var player
       if (this.live.status == 20) {
         player = videojs('my_video_1', {
-      		techOrder: ['flash', 'html5'],
+      		techOrder: ['html5', 'flash'],
       		autoplay: true,
       		sources: [
             {
