@@ -11,7 +11,7 @@ var config = {
   },
   output: {
     path: path.resolve(__dirname, 'static/'),
-    publicPath: 'http://mres.quzhiboapp.com/',
+    publicPath: '',
     filename: '[name].js'
   },
   resolve: {
@@ -94,6 +94,7 @@ var config = {
 if (process.env.NODE_ENV === 'production') {
   config.output.filename = '[name].[chunkhash].js'
   config.output.chunkFilename = '[id].[chunkhash].js'
+  config.output.publicPath = 'http://mres.quzhiboapp.com/'
   config.vue.loaders = {
     js: 'babel',
     css: ExtractTextPlugin.extract('style-loader', 'css-loader'),

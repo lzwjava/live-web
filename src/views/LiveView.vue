@@ -8,7 +8,6 @@
             <p class="subject">
               {{live.subject}}
             </p>
-            <button class="btn btn-no-play" @click="reload">暂只支持 Chrome、Firefox。若无法播放，点击我</button>
           </div>
 
           <div class="player-area">
@@ -104,9 +103,9 @@ import util from '../common/util'
 import Loading from '../components/loading.vue'
 import {Toast, SelectCell, Cells} from 'vue-weui'
 
-var videojs = require('../../node_modules/video.js/dist/video.min.js')
-require('../../node_modules/video.js/dist/video-js.min.css')
 require('font-awesome/css/font-awesome.css')
+
+var flvjs = require('../../node_modules/flv.js/dist/flv.min.js')
 
 var debug = require('debug')('LiveView')
 
@@ -166,15 +165,25 @@ export default {
       videoSelected: 0,
       videos: [],
       endIntervalId: 0,
-      liveViewId: 0
+      liveViewId: 0,
+      flvPlayer: null
     }
   },
   route: {
     data({to}) {
       var params = to.params
-      this.liveId = params.liveId
-      debug('liveId:' + this.liveId)
+      var liveId = params.liveId
+
+      if (liveId == this.liveId) {
+        return
+      }
+
+      this.liveId = liveId
+
       this.curUser = util.curUser()
+      this.conv = {}
+      this.msgs = []
+      this.client = {}
 
       util.loading(this)
       Promise.all([
@@ -197,13 +206,9 @@ export default {
 
         this.endInterval()
 
-        debug('begin interval: %j', new Date())
-
         this.endIntervalId = setInterval(() => {
           this.endLiveView()
         }, 1000 * 30)
-
-        debug('intervalId: %j', this.endIntervalId)
 
       }).catch(util.promiseErrorFn)
     }
@@ -239,7 +244,8 @@ export default {
   },
   watch: {
     videoSelected: function(val, oldVal) {
-      this.changeSource(this.videos[this.videoSelected].url)
+      // this.changeSource(this.videos[this.videoSelected].url)
+      this.playVideo()
     }
   },
   methods: {
@@ -247,58 +253,40 @@ export default {
       if (this.live.status < 20) {
         return
       }
+
+      if (!flvjs.isSupported()) {
+        util.show(this, 'error', '当前浏览器不支持观看直播，请使用 Chrome, FireFox, Safari 10, IE11 或 Edge');
+        return
+      }
+
+      if (this.flvPlayer != null) {
+        this.flvPlayer.destroy()
+        this.flvPlayer = null
+      }
       var player
       if (this.live.status == 20) {
-        player = videojs('my_video_1', {
-      		techOrder: ['html5', 'flash'],
-      		autoplay: true,
-      		sources: [
-            {
-        			type: "video/x-flv",
-        			src: this.live.flvUrl
-        		}
-          ]
-      	})
 
-        var events = ['abort', 'canplay', 'canplaythrough', 'durationchange', 'emptied', 'loadeddata',
-        'loadeddata', 'loadstart', 'pause', 'play', 'playing','ratechange', 'seeked', 'seeking', 'stalled',
-          'suspend', 'waiting','timeupdate', 'volumechange', 'error']
-          for (var i = 0; i < events.length; i++) {
-            var name = events[i]
-            player.one(name, videojs.bind(player, function(event) {
-              console.log(event.type)
-            }));
-          }
+        var videoElement = document.getElementById('my_video_1');
+        var flvPlayer = flvjs.createPlayer({
+            type: 'flv',
+            url: this.live.flvUrl
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+        this.flvPlayer = flvPlayer
       } else if (this.live.status == 30) {
-        player = videojs('my_video_1', {
-      		techOrder: ['html5', 'flash'],
-      		autoplay: true,
-      		sources: [
-            {
-              type: 'video/mp4',
-              src: this.videos[this.videoSelected].url
-            }
-          ]
-      	})
+
+        var videoElement = document.getElementById('my_video_1');
+        var flvPlayer = flvjs.createPlayer({
+            type: 'mp4',
+            url: this.videos[this.videoSelected].url
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+        this.flvPlayer = flvPlayer
       }
-    },
-    changeSource(src) {
-      var player = videojs('my_video_1')
-    	player.pause();
-    	player.currentTime(0);
-
-    	player.src(src);
-
-    	player.ready(function() {
-    		player.one('loadeddata', videojs.bind(player, function() {
-    			this.currentTime(0);
-    		}));
-    		player.load();
-    		player.play();
-    	});
-    },
-    reload() {
-      location.reload()
     },
     handleError (error) {
       if (typeof error != 'string') {
@@ -534,7 +522,9 @@ export default {
     .player-area
       width 100%
       min-height 500px
-      margin 0 auto
+      margin-left auto
+      margin-right auto
+      margin-top 35px
       position relative
       background-color #383838
       p.big-title
@@ -579,10 +569,6 @@ export default {
   .live-no-ready
     .tip
       font-size 20px
-  .btn-no-play
-    background-color #D8D8D8
-    font-size 15px
-    padding 5px 10px
   .right-panel
     width 320px
     margin-left 72%
