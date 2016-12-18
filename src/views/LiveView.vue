@@ -17,7 +17,7 @@
             </div>
             <div class="video-on" v-show="live.status == 20 || live.status == 30">
               <video id="my_video_1" class="video-js vjs-default-skin"
-                controls preload="auto" width="700" height="500">
+                controls preload="auto" width="700" height="500"></video>
 
               <div class="video-poster-cover" v-show="playStatus != 2">
                 <img :src="live.coverUrl" width="100%" height="100%"/>
@@ -166,7 +166,8 @@ export default {
       videos: [],
       endIntervalId: 0,
       liveViewId: 0,
-      flvPlayer: null
+      flvPlayer: null,
+      playStatus: 0
     }
   },
   route: {
@@ -184,6 +185,7 @@ export default {
       this.conv = {}
       this.msgs = []
       this.client = {}
+      this.playStatus = 0
 
       util.loading(this)
       Promise.all([
@@ -221,6 +223,7 @@ export default {
     debug('detached')
     this.endLiveView()
     this.endInterval()
+    this.destoryPlayer()
   },
   computed: {
     timeDuration () {
@@ -250,6 +253,7 @@ export default {
   },
   methods: {
     playVideo () {
+      debug('playVideo')
       if (this.live.status < 20) {
         return
       }
@@ -259,34 +263,29 @@ export default {
         return
       }
 
-      if (this.flvPlayer != null) {
-        this.flvPlayer.destroy()
-        this.flvPlayer = null
-      }
-      var player
+      this.destoryPlayer()
+
+      var videoElement = document.getElementById('my_video_1');
+      var params
       if (this.live.status == 20) {
-
-        var videoElement = document.getElementById('my_video_1');
-        var flvPlayer = flvjs.createPlayer({
-            type: 'flv',
-            url: this.live.flvUrl
-        });
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        flvPlayer.play();
-        this.flvPlayer = flvPlayer
+        params = {type: 'flv', url: this.live.flvUrl }
       } else if (this.live.status == 30) {
-
-        var videoElement = document.getElementById('my_video_1');
-        var flvPlayer = flvjs.createPlayer({
-            type: 'mp4',
-            url: this.videos[this.videoSelected].url
-        });
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        flvPlayer.play();
-        this.flvPlayer = flvPlayer
+        params = {type: 'mp4', url: this.videos[this.videoSelected].url}
       }
+      var flvPlayer = flvjs.createPlayer(params);
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.on('loading_complete', () => {
+        debug('loading_complete')
+      })
+      flvPlayer.load();
+      flvPlayer.play();
+      this.flvPlayer = flvPlayer
+      debug('initPlayer')
+      debug(this.flvPlayer)
+      this.playStatus = 1
+      setTimeout(() => {
+        this.playStatus = 2
+      }, 1000)
     },
     handleError (error) {
       if (typeof error != 'string') {
@@ -491,6 +490,13 @@ export default {
       if (this.endIntervalId != 0) {
         clearInterval(this.endIntervalId)
         this.endIntervalId =0
+      }
+    },
+    destoryPlayer() {
+      if (this.flvPlayer != null) {
+        debug('destroy')
+        this.flvPlayer.destroy()
+        this.flvPlayer = null
       }
     }
   }
