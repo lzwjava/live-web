@@ -200,8 +200,11 @@ export default {
           return
         }
 
+        if (this.live.status == 20) {
+          this.addSystemMsg('连接了直播服务器' + this.liveHost)
+        }
+
         this.openClient()
-        debug('openClient')
         this.playVideo()
 
         this.startLiveView(this.live)
@@ -243,6 +246,14 @@ export default {
       } else {
         return 0
       }
+    },
+    liveHost() {
+      if (!this.live.flvUrl) {
+        return ''
+      }
+      var regex = /http:\/\/(.*).quzhiboapp.com.*/g
+      var match = regex.exec(this.live.flvUrl)
+      return match[1]
     }
   },
   watch: {
@@ -270,7 +281,7 @@ export default {
       if (this.live.status == 20) {
         params = {type: 'flv', url: this.live.flvUrl, cors: true}
       } else if (this.live.status == 30) {
-        params = {type: 'mp4', url: this.videos[this.videoSelected].url, cors: true}
+        params = {type: 'mp4', url: this.videos[this.videoSelected].url}
       }
       var flvPlayer = flvjs.createPlayer(params)
       flvPlayer.attachMediaElement(videoElement)
@@ -387,7 +398,7 @@ export default {
       realtime.createIMClient(this.curUser.userId + '')
       .then((client) => {
         this.client = client
-        this.addSystemMsg('服务器连接成功')
+        this.addSystemMsg('聊天服务器连接成功')
         this.registerEvent()
         this.fetchConv()
       }).catch((error) => {
