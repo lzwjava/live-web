@@ -265,20 +265,17 @@ export default {
 
       this.destoryPlayer()
 
-      var videoElement = document.getElementById('my_video_1');
+      var videoElement = document.getElementById('my_video_1')
       var params
       if (this.live.status == 20) {
-        params = {type: 'flv', url: this.live.flvUrl }
+        params = {type: 'flv', url: this.live.flvUrl, cors: true}
       } else if (this.live.status == 30) {
-        params = {type: 'mp4', url: this.videos[this.videoSelected].url}
+        params = {type: 'mp4', url: this.videos[this.videoSelected].url, cors: true}
       }
-      var flvPlayer = flvjs.createPlayer(params);
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.on('loading_complete', () => {
-        debug('loading_complete')
-      })
-      flvPlayer.load();
-      flvPlayer.play();
+      var flvPlayer = flvjs.createPlayer(params)
+      flvPlayer.attachMediaElement(videoElement)
+      flvPlayer.load()
+      flvPlayer.play()
       this.flvPlayer = flvPlayer
       debug('initPlayer')
       debug(this.flvPlayer)
