@@ -20,9 +20,9 @@
 
       <button class="btn btn-blue" @click="waitLive">设置回报名状态</button>
 
-      <button class="btn btn-blue" @click="notifyLive">群发短信开播通知</button>
+      <button class="btn btn-blue" @click="setLiveReview">设置回审核状态</button>
 
-      <button class="btn btn-blue" @click="notifyLiveByWeChat">群发微信开播通知</button>
+      <button class="btn btn-blue" @click="notifyLive">群发微信开播通知</button>
 
       <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
@@ -142,6 +142,13 @@ export default {
         this.fetchLive()
       }, util.promiseErrorFn(this))
     },
+    setLiveReview() {
+      api.get(this, 'lives/' + this.liveId +'/setReview')
+      .then((data) => {
+        util.show(this, 'success', '成功设置回审核状态')
+        this.fetchLive()
+      }, util.promiseErrorFn(this))
+    },
     convertLive() {
       api.get(this, 'recordedVideos/convert', {
         liveId: this.liveId
@@ -157,22 +164,13 @@ export default {
       util.show(this, 'success', '已经发起重播');
     },
     notifyLive() {
-      if (confirm('真的要群发短信通知吗?')) {
-        this.notifyLiveWithType('sms')
+      if (confirm('真的要群发通知吗?')) {
+        api.get(this, 'lives/' + this.liveId +'/notify')
+        .then((data) => {
+          var result = data
+          util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
+        }, util.promiseErrorFn(this))
       }
-    },
-    notifyLiveByWeChat() {
-      if (confirm('真的要群发微信通知吗?')) {
-        this.notifyLiveWithType('wechat')
-      }
-    },
-    notifyLiveWithType(type) {
-      api.get(this, 'lives/' + this.liveId +'/notify', {
-        type: type
-      }).then((data) => {
-        var result = data
-        util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
-      }, util.promiseErrorFn(this))
     },
     see(liveId) {
       this.$router.go('/lives/' + liveId)

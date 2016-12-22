@@ -11,7 +11,7 @@
           </div>
 
           <div class="player-area">
-            <div class="video-wait" v-show="live.status == 10">
+            <div class="video-wait" v-show="live.status < 20">
               <p class="big-title">离直播开始还有{{timeDuration}}</p>
               <p class="small-title">感谢参与，开播时您将收到一条短信通知~</p>
             </div>
