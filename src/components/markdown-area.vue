@@ -1,12 +1,12 @@
 <template>
-  <div id="markdown-container" class="markdown-area" :class="{active: content.length}">
-    <textarea id="textarea" placeholder="{{ placeholder }}" aria-label="{{ placeholder }}" v-show="!showPreview" v-model='content' v-el:text @keydown="keyboardSubmit"></textarea>
+  <div :id="markdownContainerId" class="markdown-area" :class="{active: content.length}">
+    <textarea :id="textareaId" placeholder="{{ placeholder }}" aria-label="{{ placeholder }}" v-show="!showPreview" v-model='content' v-el:text @keydown="keyboardSubmit"></textarea>
 
     <markdown class="markdown-preview" v-show="showPreview" :content="content" :show = "showPreview"></markdown>
 
     <div class="markdown-actions" v-show="!showPreview">
       <div id="image-upload-container">
-        <a @click.prevent="uploadImg" id="image-btn">上传图片</a>
+        <a @click.prevent="uploadImg" :id="imageBtnId">上传图片</a>
       </div>
 
       <a href="#" @click="preview">预览模式</a>
@@ -38,14 +38,19 @@
         default: ''
       }
     },
-    data: function() {
+    data () {
       return {
         showPreview: false,
-        uploading: false
-      };
+        uploading: false,
+        imageBtnId: 'image-btn',
+        textareaId: 'textarea',
+        markdownContainerId: 'markdown-container'
+      }
     },
     created() {
-
+      this.imageBtnId = 'image-btn-' + util.randomString(3)
+      this.textareaId = 'textarea-' + util.randomString(3)
+      this.markdownContainerId = 'markdown-container-' + util.randomString(3)
     },
     ready() {
       this.initQiniu()
@@ -76,7 +81,7 @@
       image: function(e) {
       },
       insertLink(link) {
-        var textarea = document.getElementById('textarea')
+        var textarea = document.getElementById(this.textareaId)
         this.insertAtCursor(textarea, link)
       },
       insertAtCursor(myField, myValue) {
@@ -124,7 +129,7 @@
             var key =result.key;
             var uploader = Qiniu.uploader({
                 runtimes: 'html5,flash,html4',    //上传模式,依次退化
-                browse_button: 'image-btn',       //上传选择的点选按钮，**必需**
+                browse_button: this.imageBtnId,       //上传选择的点选按钮，**必需**
                 uptoken_url: 'useless',
                 uptoken: uptoken,
                 domain: bucketUrl,
@@ -136,7 +141,7 @@
                 max_file_size: '100mb',           //最大文件体积限制
                 max_retries: 3,                   //上传失败最大重试次数
                 dragdrop: false,                  //开启可拖曳上传
-                drop_element: 'markdown-container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                drop_element: this.markdownContainerId,        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
                 chunk_size: '4mb',                //分块上传时，每片的体积
                 auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
                 init: {
@@ -147,14 +152,8 @@
                     'UploadProgress': function(up, file) {
                     },
                     'FileUploaded': function(up, file, info) {
-                           // info:
-                           // {
-                           //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-                           //    "key": "gogopher.jpg"
-                           //  }
                            var res = JSON.parse(info);
                            var sourceLink = bucketUrl + '/' + res.key;
-                           debug('sourceLink: %j', sourceLink);
                            component.insertLink(sprintf('![%s](%s)\n', file.name, sourceLink))
                     },
                     'Error': function(up, err, errTip) {

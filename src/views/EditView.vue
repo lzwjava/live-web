@@ -57,6 +57,14 @@
             </div>
           </div>
 
+          <div class="row">
+            <span class="hint">请输入房间公告(可无)</span>
+            <div class="notice-area">
+                <markdown-area class="form-field form-content" :content.sync="notice" placeholder=""></markdown-area>
+                <p class="tip">支持 Markdown</p>
+            </div>
+          </div>
+
           <div class="row row-action">
             <button class="btn btn-blue" @click="saveLive">保存</button>
             <button class="btn btn-blue" @click="publishLive">提交审核</button>
@@ -101,7 +109,8 @@ export default {
       previewUrl: '',
       liveId: 0,
       speakerIntro: '',
-      needPay: 0
+      needPay: 0,
+      notice: ''
     }
   },
   computed: {
@@ -141,6 +150,7 @@ export default {
       this.previewUrl = live.previewUrl
       this.speakerIntro = live.speakerIntro
       this.needPay = live.needPay
+      this.notice = live.notice
     },
     saveLive() {
       var data = {};
@@ -164,6 +174,9 @@ export default {
         data.needPay = 1
       } else {
         data.needPay = 0
+      }
+      if (this.notice) {
+        data.notice = this.notice
       }
       this.saveLiveData(data)
     },
@@ -304,7 +317,7 @@ export default {
       width 95%
       textarea
         width 100%
-        height 50px
+        height 60px
         margin-top 5px
         font-size 16px
         border 1px solid rgba(40,47,49,0.3)
@@ -322,6 +335,16 @@ export default {
         color rgba(40,47,49,.6)
         font-size 13px
         margin 8px 0px
+    .notice-area
+        width 95%
+        textarea
+            width 100%
+            height 60px
+            margin-top 5px
+        p.tip
+          color rgba(40,47,49,.6)
+          font-size 13px
+          margin 8px 0px
     #upload-container
       img
         width 200px
