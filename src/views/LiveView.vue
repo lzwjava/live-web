@@ -172,7 +172,8 @@ export default {
       endIntervalId: 0,
       liveViewId: 0,
       flvPlayer: null,
-      playStatus: 0
+      playStatus: 0,
+      isSending: false
     }
   },
   route: {
@@ -306,17 +307,6 @@ export default {
       }
       util.show(this, 'error', error)
     },
-    testSendMsgs() {
-      setTimeout(() => {
-        for(var i = 0; i< 20;i++) {
-          var text = i + ''
-          setTimeout(() => {
-            this.inputMsg = util.randomString(3);
-            this.sendMsg()
-          }, i * 100)
-        }
-      }, 2000)
-    },
     addMsg(msg) {
       var msgList = this.$els.msgList
       var isTouchBottom = msgList.scrollHeight < msgList.scrollTop + msgList.offsetHeight + 5
@@ -349,20 +339,35 @@ export default {
       }
       var textMsg = new TextMessage(this.inputMsg)
       textMsg.setAttributes({username:this.curUser.username})
-      this.conv.send(textMsg)
-      .then((message) => {
-        this.addChatMsg(message)
-        this.inputMsg = ''
-      }).catch(this.handleError)
+      this.commonSendMsg(textMsg)
+       .then((msg) => {
+         this.inputMsg = ''
+       })
+    },
+    commonSendMsg(msg) {
+      if (this.isSending) {
+        util.show(this, 'error', '请等待上一条消息发送完成');
+        return
+      }
+      this.isSending = true
+      return new Promise((resolve, reject) => {
+        this.conv.send(msg)
+          .then((message) => {
+          this.isSending = false
+          this.addChatMsg(message)
+          resolve(message)
+        }, (error) => {
+          this.isSending = false
+          this.handleError(error)
+          reject(error)
+        })
+      })
     },
     sendSystemMsg(text) {
       var systemMsg = new SystemMessage()
       systemMsg.setText(text)
       systemMsg.setAttributes({username:this.curUser.username})
-      this.conv.send(systemMsg)
-       .then((message) => {
-         this.addChatMsg(message)
-       }).catch(this.handleError)
+      this.commonSendMsg(systemMsg)
     },
     playVoice(serverId) {
       // wx.downloadVoice({
