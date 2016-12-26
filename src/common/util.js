@@ -110,6 +110,10 @@ function isDebug() {
   return process.env.NODE_ENV != 'production'
 }
 
+exports.isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+}
+
 exports.randomString = randomString
 exports.isDebug = isDebug
 exports.show = show

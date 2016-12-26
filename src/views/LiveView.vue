@@ -10,7 +10,7 @@
             </p>
 
             <p class="tips">
-              需要加载一段时间，请耐心等待
+              暂只支持 Chrome，同时需要加载一段时间，请等待
             </p>
 
           </div>
@@ -28,7 +28,7 @@
                 <img :src="live.coverUrl" width="100%" height="100%"/>
                 <div class="video-center">
                   <img class="loading-img" v-show="playStatus == 1" src="../img/video-circle.png">
-                  <div class="canplay" v-show="playStatus == 0"></div>
+                  <div class="canplay" v-show="playStatus == 0" @click="playVideo"></div>
                 </div>
               </div>
             </div>
@@ -275,8 +275,8 @@ export default {
         return
       }
 
-      if (!flvjs.isSupported()) {
-        util.show(this, 'error', '当前浏览器不支持观看直播，请使用 Chrome, FireFox, Safari 10, IE11 或 Edge');
+      if (!flvjs.isSupported() || util.isSafari()) {
+        util.show(this, 'error', '当前浏览器不支持观看直播，请使用 Chrome');
         return
       }
 
@@ -290,16 +290,49 @@ export default {
         params = {type: 'mp4', url: this.videos[this.videoSelected].url}
       }
       var flvPlayer = flvjs.createPlayer(params)
+
+      debug('LoggingControl')
+      flvjs.LoggingControl.enableAll = true
+
+      flvPlayer.on('error', (error) => {
+        debug('error event')
+        util.show(this, 'error', error)
+      })
+
+      flvPlayer.on('loading_complete', () => {
+        debug('loading_complete')
+      })
+
+      flvPlayer.on('media_info', (info) => {
+        debug('media_info: %j', info)
+      })
+
+      flvPlayer.on('io_error', () => {
+        debug('io_error')
+      })
+
+      flvPlayer.on('statistics_info', (info) => {
+        debug('statistics_info: %j', info)
+      })
+
+      flvPlayer.on('recovered_early_eof', () => {
+        debug('recovered_early_eof')
+      })
+
       flvPlayer.attachMediaElement(videoElement)
       flvPlayer.load()
       flvPlayer.play()
       this.flvPlayer = flvPlayer
       debug('initPlayer')
       debug(this.flvPlayer)
+
       this.playStatus = 1
       setTimeout(() => {
         this.playStatus = 2
       }, 1000)
+    },
+    canPlayClick() {
+      this.playVideo()
     },
     handleError (error) {
       if (typeof error != 'string') {
@@ -350,18 +383,15 @@ export default {
         return
       }
       this.isSending = true
-      return new Promise((resolve, reject) => {
-        this.conv.send(msg)
-          .then((message) => {
+      return this.conv.send(msg)
+       .then((message) => {
           this.isSending = false
           this.addChatMsg(message)
-          resolve(message)
+          return Promise.resolve(message)
         }, (error) => {
           this.isSending = false
           this.handleError(error)
-          reject(error)
         })
-      })
     },
     sendSystemMsg(text) {
       var systemMsg = new SystemMessage()
