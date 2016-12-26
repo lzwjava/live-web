@@ -8,6 +8,11 @@
             <p class="subject">
               {{live.subject}}
             </p>
+
+            <p class="tips">
+              需要加载一段时间，请耐心等待
+            </p>
+
           </div>
 
           <div class="player-area">
@@ -538,7 +543,7 @@ export default {
       min-height 500px
       margin-left auto
       margin-right auto
-      margin-top 35px
+      margin-top 15px
       position relative
       background-color #383838
       p.big-title
@@ -578,6 +583,10 @@ export default {
   .subject-area
     .subject
       font-size 20px
+    .tips
+      margin-top 5px
+      font-size 16px
+      color #707070
   #my_video_1
     margin 0 auto
   .live-no-ready

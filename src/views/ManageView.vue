@@ -22,7 +22,9 @@
 
       <button class="btn btn-blue" @click="setLiveReview">设置回审核状态</button>
 
-      <button class="btn btn-blue" @click="notifyLive">群发微信开播通知</button>
+      <button class="btn btn-blue" @click="notifyLive(1)">群发一小时前通知</button>
+
+      <button class="btn btn-blue" @click="notifyLive(0)">群发微信开播通知</button>
 
       <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
@@ -163,10 +165,11 @@ export default {
       }, util.promiseErrorFn(this))
       util.show(this, 'success', '已经发起重播');
     },
-    notifyLive() {
+    notifyLive(oneHour) {
       if (confirm('真的要群发通知吗?')) {
-        api.get(this, 'lives/' + this.liveId +'/notify')
-        .then((data) => {
+        api.get(this, 'lives/' + this.liveId +'/notify', {
+          'oneHour': oneHour
+        }).then((data) => {
           var result = data
           util.show(this, 'success', '发送结果: ' + result.succeedCount + '/' +result.total)
         }, util.promiseErrorFn(this))
