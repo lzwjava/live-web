@@ -307,10 +307,6 @@ export default {
         debug('media_info: %j', info)
       })
 
-      flvPlayer.on('io_error', () => {
-        debug('io_error')
-      })
-
       flvPlayer.on('statistics_info', (info) => {
         debug('statistics_info: %j', info)
       })
