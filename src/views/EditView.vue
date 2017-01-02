@@ -1,7 +1,7 @@
 <template>
   <div class="edit-view">
 
-    <loading>
+    <!-- <loading> -->
       <div class="write-container">
           <div class="status">
             {{statusText}}
@@ -17,6 +17,11 @@
           <div class="row need-pay-row">
             <span class="hint">是否需要付费</span>
             <input type="checkbox" v-model="needPay" name="needPay" value="0">
+          </div>
+
+          <div class="row share-icon">
+            <span class="hint">分享是否显示封面(默认头像)</span>
+            <input type="checkbox" v-model="shareIcon" name="shareIcon" value="0">
           </div>
 
           <div class="row">
@@ -70,7 +75,7 @@
             <button class="btn btn-blue" @click="publishLive">提交审核</button>
           </div>
       </div>
-    </loading>
+    <!-- </loading> -->
 
   </div>
 </template>
@@ -110,6 +115,7 @@ export default {
       liveId: 0,
       speakerIntro: '',
       needPay: 0,
+      shareIcon: 0,
       notice: ''
     }
   },
@@ -150,6 +156,7 @@ export default {
       this.previewUrl = live.previewUrl
       this.speakerIntro = live.speakerIntro
       this.needPay = live.needPay
+      this.shareIcon = live.shareIcon
       this.notice = live.notice
     },
     saveLive() {
@@ -174,6 +181,11 @@ export default {
         data.needPay = 1
       } else {
         data.needPay = 0
+      }
+      if (this.shareIcon) {
+        data.shareIcon = 1
+      } else {
+        data.shareIcon = 0
       }
       if (this.notice) {
         data.notice = this.notice
@@ -271,10 +283,8 @@ export default {
   justify-content center
   .write-container
     width 50%
-    margin-left 25%
+    margin 0 auto
     background-color #fff
-    margin-top 0
-    margin-bottom 0
     padding 10px
     border 1px solid rgba(0,0,0,0.15)
     box-shadow 0px 1px 0px rgba(255,255,255,0.15) inset, 0px 1px 2px rgba(0,0,0,0.15)
@@ -328,9 +338,9 @@ export default {
     .edit-area
       width 95%
       textarea
-          width 100%
-          height 200px
-          margin-top 5px
+        width 100%
+        height 200px
+        margin-top 5px
       p.tip
         color rgba(40,47,49,.6)
         font-size 13px
