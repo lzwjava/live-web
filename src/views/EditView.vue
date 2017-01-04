@@ -19,7 +19,7 @@
             <input type="checkbox" v-model="needPay" name="needPay" value="0">
           </div>
 
-          <div class="row share-icon">
+          <div class="row need-pay-row">
             <span class="hint">分享是否显示封面(默认头像)</span>
             <input type="checkbox" v-model="shareIcon" name="shareIcon" value="0">
           </div>
