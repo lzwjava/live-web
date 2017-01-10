@@ -23,7 +23,7 @@ var rewriteUrl = function(replacePath) {
 var prod = true;
 var target;
 if (prod) {
-  target = "http://api.quzhiboapp.com";
+  target = "https://api.quzhiboapp.com";
 } else {
   target = "http://localhost:3005";
 }
@@ -31,8 +31,9 @@ if (prod) {
 var proxy = [{
 	path: new RegExp("/api/(.*)"),
 	target: target,
-	rewrite: rewriteUrl("/$1")
-}];
+	rewrite: rewriteUrl("/$1"),
+  changeOrigin: true
+}]
 
 var app = new WebpackDevServer(webpack(config), {
   // allow access over local network

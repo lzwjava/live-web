@@ -275,7 +275,12 @@ export default {
         return
       }
 
-      if (!flvjs.isSupported() || util.isSafari()) {
+      if (util.isSafari() && this.live.status == 20) {
+        util.show(this, 'error', 'Safari 只支持收看回放，不支持看直播');
+        return
+      }
+
+      if (!flvjs.isSupported()) {
         util.show(this, 'error', '当前浏览器不支持观看直播，请使用 Chrome');
         return
       }
