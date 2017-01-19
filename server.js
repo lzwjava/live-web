@@ -17,8 +17,8 @@ var rewriteUrl = function(replacePath) {
         var query = queryIndex >= 0 ? req.url.substr(queryIndex) : "";
         req.url = req.path.replace(opt.path, replacePath) + query;
         console.log("rewriting ", req.originalUrl, req.url, req.hostname);
-    };
-};
+    }
+}
 
 var prod = true;
 var target;
@@ -45,11 +45,11 @@ var app = new WebpackDevServer(webpack(config), {
   debug: true,
   // suppress useless text
   noInfo: true
-});
+})
 
 app.listen(9090, '0.0.0.0', function (err, result) {
   console.log('http://localhost:9090');
   if (err) {
     console.log(err);
   }
-});
+})
