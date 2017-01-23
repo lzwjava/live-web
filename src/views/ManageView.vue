@@ -125,7 +125,7 @@ export default {
     data({to}) {
       var params = this.$route.params
       this.liveId = params.liveId
-      // this.fetchLive()
+      this.fetchLive()
     }
   },
   created() {
