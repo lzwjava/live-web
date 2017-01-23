@@ -14,9 +14,43 @@
       2)流密钥(Streaming Key): {{pushKey}}
     </p>
 
-    <div class="control-btn">
+    <table class="control-table">
 
-      <button class="btn btn-blue" @click="beginLive">开始直播</button>
+      <tbody>
+        <tr>
+          <td>操作</td>
+          <td>说明</td>
+        </tr>
+
+        <tr>
+          <td><button class="btn btn-blue" @click="beginLive">开始直播</button></td>
+          <td class="tips">点击之后，观众可看到画面。确认已开始推流之后点击</td>
+        </tr>
+
+        <tr>
+          <td><button class="btn btn-blue" @click="notifyLive(0)">群发微信开播通知</button></td>
+          <td class="tips">通过微信服务号发送给所有观众通知，确认画面良好、快要正式开始之后点击</td>
+        </tr>
+
+        <tr>
+          <td><button class="btn btn-blue subject" @click="see(live.liveId)">进入直播间</button></td>
+          <td class="tips">进入自己的直播间，用来和观众互动或检测直播正常</td>
+        </tr>
+
+        <tr>
+          <td><button class="btn btn-blue" @click="endLive">转码直播</button></td>
+          <td class="tips">由趣直播管理员操作，主播不需要点击</td>
+        </tr>
+
+        <tr>
+          <td><button class="btn btn-blue" @click="finishLive">结束直播</button></td>
+          <td class="tips">由趣直播管理员操作，主播不需要点击</td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <!-- <div class="control-btn">
 
       <button class="btn btn-blue" @click="waitLive">设置回报名状态</button>
 
@@ -24,24 +58,19 @@
 
       <button class="btn btn-blue" @click="notifyLive(1)">群发一小时前通知</button>
 
-      <button class="btn btn-blue" @click="notifyLive(0)">群发微信开播通知</button>
-
-      <button class="btn btn-blue subject" @click="see(live.liveId)">观看直播</button>
 
     </div>
 
     <div class="control-btn">
-      <button class="btn btn-blue" @click="endLive">转码直播</button>
 
       <button class="btn btn-blue" @click="convertLive">开始转码</button>
 
       <button class="btn btn-blue" @click="replayLive">开始重播</button>
 
-      <button class="btn btn-blue" @click="finishLive">结束直播</button>
-    </div>
+    </div> -->
 
 
-    <p>
+    <p class="wechat-share">
       微信分享地址:{{shareLink}}
     </p>
 
@@ -96,7 +125,7 @@ export default {
     data({to}) {
       var params = this.$route.params
       this.liveId = params.liveId
-      this.fetchLive()
+      // this.fetchLive()
     }
   },
   created() {
@@ -197,5 +226,17 @@ export default {
     margin-top 50px
   .obs-setting
     font-size 16px
+  .control-table
+    margin 20px auto
+    font-size 16px
+    border-top solid #000 1px
+    border-left solid #000 1px
+    tbody
+      td
+        border-bottom solid #000 1px
+        border-right solid #000 1px
+      td.tips
+        font-size 14px
+        max-width 300px
 
 </style>
