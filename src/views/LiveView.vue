@@ -110,9 +110,14 @@ import {Toast, SelectCell, Cells} from 'vue-weui'
 
 require('font-awesome/css/font-awesome.css')
 
-var flvjs = require('../../node_modules/flv.js/dist/flv.min.js')
+var flvjs = require('flv.js/dist/flv.min.js')
 
-require('../../node_modules/videojs-contrib-hls/dist/videojs-contrib-hls.js')
+var videojs = require('video.js/dist/video.min.js')
+require('video.js/dist/video-js.min.css')
+
+window.videojs = videojs
+
+require('videojs-contrib-hls/dist/videojs-contrib-hls.js')
 
 var debug = require('debug')('LiveView')
 
