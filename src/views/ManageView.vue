@@ -27,6 +27,11 @@
           <td class="tips">点击之后，观众可看到画面。确认已开始推流之后点击</td>
         </tr>
 
+        <!-- <tr>
+          <td><button class="btn btn-blue" @click="waitLive">测试结束设置成报名状态</button></td>
+          <td class="tips">测试直播结束后，可点击来设回报名中</td>
+        </tr> -->
+
         <tr>
           <td><button class="btn btn-blue" @click="notifyLive(0)">群发微信开播通知</button></td>
           <td class="tips">通过微信服务号发送给所有观众通知，确认画面良好、快要正式开始之后点击</td>
@@ -38,13 +43,8 @@
         </tr>
 
         <tr>
-          <td><button class="btn btn-blue" @click="endLive">转码直播</button></td>
-          <td class="tips">由趣直播管理员操作，主播不需要点击</td>
-        </tr>
-
-        <tr>
           <td><button class="btn btn-blue" @click="finishLive">结束直播</button></td>
-          <td class="tips">由趣直播管理员操作，主播不需要点击</td>
+          <td class="tips">当结束推流之后，点击结束直播，观众可看到回放</td>
         </tr>
 
       </tbody>
@@ -52,7 +52,7 @@
 
     <!-- <div class="control-btn">
 
-      <button class="btn btn-blue" @click="waitLive">设置回报名状态</button>
+
 
       <button class="btn btn-blue" @click="setLiveReview">设置回审核状态</button>
 

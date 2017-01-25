@@ -21,8 +21,8 @@
               <p class="small-title">感谢参与，开播时您将收到一条短信通知~</p>
             </div>
             <div class="video-on" v-show="live.status == 20 || live.status == 30">
-              <video id="my_video_1" class="video-js vjs-default-skin"
-                controls preload="auto" width="700" height="500"></video>
+              <video id="my_video_1" controls preload="auto" class="video-js vjs-default-skin"
+                width="700" height="500"></video>
 
               <div class="video-poster-cover" v-show="playStatus != 2">
                 <img :src="live.coverUrl" width="100%" height="100%"/>
@@ -280,13 +280,7 @@ export default {
         return
       }
 
-      var useFlvjs
       if (this.live.status == 20) {
-        useFlvjs = true
-      } else {
-        useFlvjs = false
-      }
-      if (useFlvjs) {
         this.playWithFlvjs()
       } else {
         this.playWithVideojs()
@@ -636,6 +630,9 @@ export default {
       .video-end
         padding-top 100px
       .video-on
+        .video-js
+          width 700px !important
+          height 500px !important
         .video-poster-cover
           @extend .full-space
           text-align center
