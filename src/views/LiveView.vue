@@ -112,10 +112,7 @@ require('font-awesome/css/font-awesome.css')
 
 var flvjs = require('../../node_modules/flv.js/dist/flv.min.js')
 
-var videojs = require('../../node_modules/video.js/dist/video.min.js')
-window.videojs = videojs
-require('../../node_modules/videojs-contrib-hls/dist/videojs-contrib-hls.min.js')
-require('../../node_modules/video.js/dist/video-js.min.css')
+require('../../node_modules/videojs-contrib-hls/dist/videojs-contrib-hls.js')
 
 var debug = require('debug')('LiveView')
 
@@ -147,9 +144,6 @@ var realtime = new Realtime({
   region: 'cn',
   noBinary: true
 })
-
-debug('realtime')
-debug(realtime)
 
 realtime.register(WxAudioMessage)
 realtime.register(SystemMessage)
@@ -341,7 +335,7 @@ export default {
       }, 1000)
     },
     playWithVideojs() {
-      var player = videojs('my_video_1');
+      var player = videojs('my_video_1')
 
       var video = this.videos[this.videoSelected]
       var src
