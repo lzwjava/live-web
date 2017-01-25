@@ -112,6 +112,11 @@ require('font-awesome/css/font-awesome.css')
 
 var flvjs = require('../../node_modules/flv.js/dist/flv.min.js')
 
+var videojs = require('../../node_modules/video.js/dist/video.min.js')
+window.videojs = videojs
+require('../../node_modules/videojs-contrib-hls/dist/videojs-contrib-hls.min.js')
+require('../../node_modules/video.js/dist/video-js.min.css')
+
 var debug = require('debug')('LiveView')
 
 var lcChat = require('leancloud-realtime')
@@ -264,7 +269,7 @@ export default {
   },
   watch: {
     videoSelected: function(val, oldVal) {
-      // this.changeSource(this.videos[this.videoSelected].url)
+
       this.playVideo()
     }
   },
@@ -274,6 +279,20 @@ export default {
       if (this.live.status < 20) {
         return
       }
+
+      var useFlvjs
+      if (this.live.status == 20) {
+        useFlvjs = true
+      } else {
+        useFlvjs = false
+      }
+      if (useFlvjs) {
+        this.playWithFlvjs()
+      } else {
+        this.playWithVideojs()
+      }
+    },
+    playWithFlvjs() {
 
       if (util.isSafari() && this.live.status == 20) {
         util.show(this, 'error', 'Safari 只支持收看回放，不支持看直播');
@@ -288,12 +307,7 @@ export default {
       this.destoryPlayer()
 
       var videoElement = document.getElementById('my_video_1')
-      var params
-      if (this.live.status == 20) {
-        params = {type: 'flv', url: this.live.flvUrl, cors: true}
-      } else if (this.live.status == 30) {
-        params = {type: 'mp4', url: this.videos[this.videoSelected].url}
-      }
+      var params = {type: 'flv', url: this.live.flvUrl, cors: true}
       var flvPlayer = flvjs.createPlayer(params)
 
       debug('LoggingControl')
@@ -331,6 +345,33 @@ export default {
       setTimeout(() => {
         this.playStatus = 2
       }, 1000)
+    },
+    playWithVideojs() {
+      var player = videojs('my_video_1');
+
+      var video = this.videos[this.videoSelected]
+      var src
+      if (video.type == 'm3u8') {
+        player.src({
+          src: video.m3u8Url,
+          type: 'application/x-mpegURL',
+          withCredentials: false
+        })
+      } else if (video.type == 'mp4'){
+        player.src({
+          src: video.url,
+          type: 'video/mp4',
+          withCredentials: false
+        })
+      }
+
+      player.play()
+
+      this.playStatus = 1
+      setTimeout(() => {
+        this.playStatus = 2
+      }, 1000)
+
     },
     canPlayClick() {
       this.playVideo()
