@@ -33,6 +33,11 @@
         </tr> -->
 
         <tr>
+          <td><button class="btn btn-blue" @click="notifyLive(1)">群发一小时开播通知</button></td>
+          <td class="tips">因为大家可能并不一直看着微信，提前通知一下比较好</td>
+        </tr>
+
+        <tr>
           <td><button class="btn btn-blue" @click="notifyLive(0)">群发微信开播通知</button></td>
           <td class="tips">通过微信服务号发送给所有观众通知，确认画面良好、快要正式开始之后点击</td>
         </tr>
