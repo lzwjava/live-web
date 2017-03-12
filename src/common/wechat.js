@@ -14,9 +14,9 @@ function weixinOauthUrl(redirectUrl) {
 function weixinOauthUserUrl() {
   var redirectUrl;
   if (util.isDebug()) {
-    redirectUrl = 'http://quzhiboapp.com/#wechat/oauthTest'
+    redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauthTest'
   } else {
-    redirectUrl = 'http://quzhiboapp.com/#wechat/oauth'
+    redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauth'
   }
   return weixinOauthUrl(redirectUrl)
 }
@@ -27,3 +27,4 @@ function oauthLogin() {
 
 exports.oauthLogin = oauthLogin
 exports.wechatAppId = wechatAppId
+exports.weixinOauthUrl = weixinOauthUrl

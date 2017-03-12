@@ -274,7 +274,12 @@ export default {
   },
   methods: {
     playVideo () {
-      debug('playVideo')
+      if (util.isSafari()) {
+        window.location = 'http://m.quzhiboapp.com/?sessionToken=' + this.curUser.sessionToken
+        + '&liveId=' + this.live.liveId
+        return
+      }
+
       if (this.live.status < 20) {
         return
       }
@@ -286,12 +291,6 @@ export default {
       }
     },
     playWithFlvjs() {
-
-      if (util.isSafari() && this.live.status == 20) {
-        util.show(this, 'error', 'Safari 只支持收看回放，不支持看直播');
-        return
-      }
-
       if (!flvjs.isSupported()) {
         util.show(this, 'error', '当前浏览器不支持观看直播，请使用 Chrome');
         return
@@ -343,7 +342,6 @@ export default {
       var player = videojs('my_video_1')
 
       var video = this.videos[this.videoSelected]
-      var src
       if (video.type == 'm3u8') {
         player.src({
           src: video.m3u8Url,
@@ -512,6 +510,7 @@ export default {
           if (this.live.attendanceCount > 200) {
             needSendIntoRoom = false
           }
+          needSendIntoRoom = false
           if (needSendIntoRoom) {
             this.sendSystemMsg(this.curUser.username + '进入了房间')
           }

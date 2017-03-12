@@ -4,7 +4,11 @@
     <loading>
       <!-- <div class="big-word">请点击「对准电脑屏幕扫描」按钮<br>然后扫描二维码登录</div> -->
 
-      <div id="login_container"></div>
+      <button  @click="wechatLogin" class="wechat-login btn btn-blue">
+        微信登录
+      </button>
+
+      <!-- <div id="login_container"></div> -->
 
       <!-- <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" /> -->
 
@@ -19,7 +23,11 @@ import util from '../common/util'
 import Loading from '../components/loading.vue'
 import wechat from '../common/wechat'
 
+require('sprintf-js')
+
 var debug = require('debug')('HomeView');
+
+
 
 export default {
   name: 'HomeView',
@@ -112,20 +120,10 @@ export default {
     fetchUser() {
     },
     initWechatLogin() {
-      var redirectUrl;
-      if (util.isDebug()) {
-        redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauthTest'
-      } else {
-        redirectUrl = 'http://quzhiboapp.com/#wechat/silentOauth'
-      }
-      var obj = new WxLogin({
-        id:"login_container",
-        appid: wechat.wechatAppId,
-        scope: 'snsapi_login',
-        redirect_uri: encodeURIComponent(redirectUrl),
-        state: util.randomString(6),
-        style: 'white'
-      })
+
+    },
+    wechatLogin() {
+      wechat.oauthLogin()
     }
   },
 
@@ -143,6 +141,7 @@ export default {
   min-height 700px
   background url("../img/hero.jpg") no-repeat
   background-size cover
+  text-align center
   .big-word
     color #fff
     font-size 20px
@@ -156,5 +155,11 @@ export default {
     margin 0 auto
     .title
         color #fff
+  .wechat-login
+    margin-top 200px
+    width 200px
+    font-size 20px
+
+
 
 </style>
