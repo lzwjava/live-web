@@ -69,6 +69,14 @@
             </div>
           </div>
 
+          <div class="row" id="upload-container-course">
+            <span class="hint">请上传课件(可选，支持后缀格式ppt,pptx,pdf,sketch,key,zip)</span>
+            <button class="upload-btn" id="pick-courseware">本地上传</button>
+            <div v-if="coursewareUrl">
+              <a :href="coursewareUrl">课件地址：{{ coursewareUrl }}</a>
+            </div>
+          </div>
+
           <div class="row row-action">
             <button class="btn btn-blue" @click="saveLive">保存</button>
             <button class="btn btn-blue" @click="publishLive">提交审核</button>
@@ -113,13 +121,16 @@ export default {
       amount: 0,
       myDate: '',
       coverUrl: '',
+      coursewareUrl: '',
+      previewUrl: '',
       liveId: 0,
       speakerIntro: '',
       needPay: 0,
       shareIcon: 0,
       notice: '',
       topics: [],
-      topicSelected: 0
+      topicSelected: 0,
+      bucketUrl: ''
     }
   },
   computed: {
@@ -166,6 +177,8 @@ export default {
       this.content = live.detail
       this.myDate = live.planTs
       this.coverUrl = live.coverUrl
+      this.coursewareUrl = live.coursewareUrl
+      this.previewUrl = live.previewUrl
       this.speakerIntro = live.speakerIntro
       this.needPay = live.needPay
       this.shareIcon = live.shareIcon
@@ -207,9 +220,10 @@ export default {
       } else {
         this.updateTopic(this.liveId, 'add', this.topicSelected)
       }
-
       data.notice = this.notice
-
+      if (this.coursewareUrl) {
+        data.coursewareUrl = this.coursewareUrl
+      }
       this.saveLiveData(data)
     },
     saveLiveData(data) {
@@ -235,62 +249,112 @@ export default {
       }
       this.saveLiveData(data)
     },
+    updateCoursewareKey(key) {
+      this.coursewareUrl = this.bucketUrl + '/' + key
+      this.saveLiveData({coursewareKey: key})
+    },
     initQiniu() {
       var component = this;
       api.get(this, 'files/uptoken').then((res) => {
         var result = res
-        var uptoken = result.uptoken;
-        var bucketUrl = result.bucketUrl;
-        var key =result.key;
+        var uptoken = result.uptoken
+        var bucketUrl = result.bucketUrl
+        this.bucketUrl = bucketUrl
+        var key =result.key
         var uploader = Qiniu.uploader({
-            runtimes: 'html5,flash,html4',    //上传模式,依次退化
-            browse_button: 'pickfiles',       //上传选择的点选按钮，**必需**
-            uptoken_url: 'useless',
-            uptoken: uptoken,
-            domain: bucketUrl,
-            flash_swf_url: 'js/plupload/Moxie.swf',
-            unique_names: false,
-            save_key: false,
-            get_new_uptoken: false,           //设置上传文件的时候是否每次都重新获取新的token
-            container: 'upload-container',    //上传区域DOM ID，默认是browser_button的父元素，
-            max_file_size: '100mb',           //最大文件体积限制
-            max_retries: 3,                   //上传失败最大重试次数
-            dragdrop: false,                  //开启可拖曳上传
-            drop_element: 'upload-container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-            chunk_size: '4mb',                //分块上传时，每片的体积
-            auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
-            init: {
-                'FilesAdded': function(up, files) {
-                },
-                'BeforeUpload': function(up, file) {
-                },
-                'UploadProgress': function(up, file) {
-                },
-                'FileUploaded': function(up, file, info) {
-                       // info:
-                       // {
-                       //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-                       //    "key": "gogopher.jpg"
-                       //  }
-                       var res = JSON.parse(info);
-                       var sourceLink = bucketUrl + '/' + res.key;
-                       debug('sourceLink: %j', sourceLink);
-                       component.updateCover(sourceLink)
-                },
-                'Error': function(up, err, errTip) {
-                       debug('qiniu error %j errTip %j', err, errTip);
-                       util.show(component, 'error', errTip)
-                },
-                'UploadComplete': function() {
-                },
-                'Key': function(up, file) {
-                    // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-                    // 该配置必须要在 unique_names: false , save_key: false 时才生效
-                    return util.randomString(6)
-                }
-            }
+          runtimes: 'html5,flash,html4',    //上传模式,依次退化
+          browse_button: 'pickfiles',       //上传选择的点选按钮，**必需**
+          uptoken_url: 'useless',
+          uptoken: uptoken,
+          domain: bucketUrl,
+          flash_swf_url: 'js/plupload/Moxie.swf',
+          unique_names: false,
+          save_key: false,
+          get_new_uptoken: false,           //设置上传文件的时候是否每次都重新获取新的token
+          container: 'upload-container',    //上传区域DOM ID，默认是browser_button的父元素，
+          max_file_size: '100mb',           //最大文件体积限制
+          max_retries: 3,                   //上传失败最大重试次数
+          dragdrop: false,                  //开启可拖曳上传
+          drop_element: 'upload-container',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          chunk_size: '4mb',                //分块上传时，每片的体积
+          auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+          init: {
+              'FilesAdded': function(up, files) {
+              },
+              'BeforeUpload': function(up, file) {
+              },
+              'UploadProgress': function(up, file) {
+              },
+              'FileUploaded': function(up, file, info) {
+                      // info:
+                      // {
+                      //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                      //    "key": "gogopher.jpg"
+                      //  }
+                      var res = JSON.parse(info);
+                      var sourceLink = bucketUrl + '/' + res.key;
+                      debug('sourceLink: %j', sourceLink);
+                      component.updateCover(sourceLink)
+              },
+              'Error': function(up, err, errTip) {
+                      debug('qiniu error %j errTip %j', err, errTip);
+                      util.show(component, 'error', errTip)
+              },
+              'UploadComplete': function() {
+              },
+              'Key': function(up, file) {
+                  // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                  // 该配置必须要在 unique_names: false , save_key: false 时才生效
+                  return util.randomString(6)
+              }
+          }
         })
-      }, util.promiseErrorFn(this))
+        var coursewareUploader = Qiniu.uploader({
+          runtimes: 'html5,flash,html4',    //上传模式,依次退化
+          browse_button: 'pick-courseware',       //上传选择的点选按钮，**必需**
+          uptoken_url: 'useless',
+          uptoken: uptoken,
+          domain: bucketUrl,
+          flash_swf_url: 'js/plupload/Moxie.swf',
+          unique_names: false,
+          save_key: false,
+          get_new_uptoken: false,           //设置上传文件的时候是否每次都重新获取新的token
+          container: 'upload-container-course',    //上传区域DOM ID，默认是browser_button的父元素，
+          max_file_size: '100mb',           //最大文件体积限制
+          max_retries: 3,                   //上传失败最大重试次数
+          dragdrop: false,                  //开启可拖曳上传
+          drop_element: 'upload-container-course',        //拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+          chunk_size: '4mb',                //分块上传时，每片的体积
+          filters: {
+            mime_types : [
+              {title : "Courseware Files", extensions: "ppt,pptx,pdf,sketch,key,zip"}    //限制文件格式
+            ]
+          },
+          auto_start: true,                 //选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+          init: {
+            'FilesAdded': function(up, files) {
+            },
+            'BeforeUpload': function(up, file) {
+            },
+            'UploadProgress': function(up, file) {
+            },
+            'FileUploaded': function(up, file, info) {
+              var res = JSON.parse(info);
+              component.updateCoursewareKey(res.key)
+            },
+            'Error': function(up, err, errTip) {
+            debug('qiniu error %j errTip %j', err, errTip);
+              util.show(component, 'error', errTip)
+            },
+            'UploadComplete': function() {
+            },
+            'Key': function(up, file) {
+              var ext = '.' + file.name.split('.').pop()
+                return util.randomString(6) + ext
+            }
+          }
+        }) // coursewareUploader
+      }) // api
     },
     updateTopic(liveId, op, topicId) {
       util.loading(this)
@@ -300,8 +364,8 @@ export default {
       }).then((res) => {
         util.loaded(this)
       }, util.promiseErrorFn(this))
-    }
-  }
+     }
+  } // methods
 }
 
 </script>
