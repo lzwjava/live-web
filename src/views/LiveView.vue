@@ -197,6 +197,9 @@ export default {
       this.client = {}
       this.playStatus = 0
 
+      window.location = 'http://m.quzhiboapp.com/?sessionToken=' + this.curUser.sessionToken
+      + '&liveId=' + this.liveId
+
       util.loading(this)
       Promise.all([
         api.fetchLive(this, this.liveId),
@@ -205,6 +208,7 @@ export default {
         util.loaded(this)
         this.live = values[0]
         this.videos = values[1]
+        this.topics = values[2]
         if (!this.live.canJoin) {
           util.show(this, 'error', '请先报名参与直播')
           return
@@ -268,15 +272,12 @@ export default {
   },
   watch: {
     videoSelected: function(val, oldVal) {
-
       this.playVideo()
     }
   },
   methods: {
     playVideo () {
       if (util.isSafari()) {
-        window.location = 'http://m.quzhiboapp.com/?sessionToken=' + this.curUser.sessionToken
-        + '&liveId=' + this.live.liveId
         return
       }
 
