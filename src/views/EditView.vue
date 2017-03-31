@@ -227,8 +227,6 @@ export default {
       this.saveLiveData(data)
     },
     saveLiveData(data) {
-
-
       util.loading(this)
       api.post(this, 'lives/' + this.live.liveId, data).then((res) => {
         util.loaded(this)
@@ -290,7 +288,7 @@ export default {
                       // {
                       //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
                       //    "key": "gogopher.jpg"
-                      //  }
+                      //    }
                       var res = JSON.parse(info);
                       var sourceLink = bucketUrl + '/' + res.key;
                       debug('sourceLink: %j', sourceLink);

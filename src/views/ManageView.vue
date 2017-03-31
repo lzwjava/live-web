@@ -101,7 +101,8 @@ export default {
   data () {
     return {
       liveId: 0,
-      live: {}
+      live: {},
+      curUser: {}
     }
   },
   computed: {
@@ -109,7 +110,7 @@ export default {
       return util.statusText(this.live.status)
     },
     shareLink() {
-      return 'http://m.quzhiboapp.com/?liveId=' + this.live.liveId
+      return 'http://m.quzhiboapp.com/?liveId=' + this.live.liveId + '&fromUserId=' + this.curUser.userId
     },
     pushPrefix() {
       return this.urlPrefix(this.live.pushUrl)
@@ -130,6 +131,7 @@ export default {
     data({to}) {
       var params = this.$route.params
       this.liveId = params.liveId
+      this.curUser = util.curUser()
       this.fetchLive()
     }
   },
