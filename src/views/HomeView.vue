@@ -2,13 +2,14 @@
 
   <div class="home-view">
     <loading>
-      <!-- <div class="big-word">请点击「对准电脑屏幕扫描」按钮<br>然后扫描二维码登录</div> -->
 
-      <button  @click="wechatLogin" class="wechat-login btn btn-blue">
-        微信登录
-      </button>
+      <div class="login-form" @click="stop($event)">
 
-      <!-- <div id="login_container"></div> -->
+        <div id="login_container">
+          
+        </div>
+
+      </div>
 
       <!-- <img class="absolute-center" :src="'api/qrcodes/gen?code=' + code" alt="" /> -->
 
@@ -65,6 +66,9 @@ export default {
   destroyed () {
   },
   methods: {
+    stop (e){
+      e.stopPropagation()
+    },
     poll () {
       this.$http.get('qrcodes/scanned', {
         'code': this.code
@@ -120,7 +124,20 @@ export default {
     fetchUser() {
     },
     initWechatLogin() {
-
+      var redirectUrl
+      if (util.isDebug()) {
+        redirectUrl = 'http://m.quzhiboapp.com/#wechat/webOauthTest'
+      } else {
+        redirectUrl = 'http://m.quzhiboapp.com/#wechat/webOauth'
+      }
+      var obj = new WxLogin({
+        id:'login_container',
+        appid: 'wxe80a6d2b5d54985c',
+        scope: 'snsapi_login',
+        redirect_uri: encodeURIComponent(redirectUrl),
+        state: util.randomString(6),
+        style: 'black'
+      })
     },
     wechatLogin() {
       wechat.oauthLogin()
@@ -150,7 +167,7 @@ export default {
   img
     width 250px
   #login_container
-    padding-top 80px
+    padding-top 20px
     width 300px
     margin 0 auto
     .title
@@ -159,7 +176,16 @@ export default {
     margin-top 200px
     width 200px
     font-size 20px
-
-
-
+.login-form
+  @extend .absolute-center
+  max-width 350px
+  height 400px
+  background #fff
+  border-radius 20px
+  text-align center
+  padding 20px 10px
+  display flex
+  align-items center
+  justify-content center
+  
 </style>
