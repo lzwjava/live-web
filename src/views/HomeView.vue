@@ -52,8 +52,6 @@ export default {
         return
       }
       debug('params:' + params)
-      // this.code = this.genCode()
-      // this.poll()
     }
   },
 
@@ -65,38 +63,7 @@ export default {
   destroyed () {
   },
   methods: {
-    poll () {
-      this.$http.get('qrcodes/scanned', {
-        'code': this.code
-      }).then((res) => {
-        if (util.filterError(this, res)) {
-          var result = res.data.result
-          if (result.scanned) {
-            util.loading(this)
-            this.$http.get('self').then((res) => {
-              util.loaded(this)
-              if (util.filterError(this, res)) {
-                this.$dispatch('updateUser', res.data.result)
-                // scanned
-                if (result.type == 0) {
-                  this.$router.go('/mylist')
-                } else if (result.type == 1) {
-                  var json = JSON.parse(result.data)
-                  var liveId = json.liveId
-                  this.$router.go('/lives/' + liveId)
-                } else {
-                  util.show(this, 'error', '未知的类型');
-                }
-              }
-            }, util.httpErrorFn(this))
-          } else {
-            // not scanned
-            this.poll()
-          }
-        }
-      })
-    },
-    loginBySessionToken: function (sessionToken, liveId) {
+    loginBySessionToken (sessionToken, liveId) {
       this.$http.get('self', {
         sessionToken: sessionToken
       }).then((resp) => {
@@ -113,9 +80,6 @@ export default {
           }
         }
       }, util.httpErrorFn(this));
-    },
-    genCode() {
-      return 'quzhibo-' + util.randomString(32)
     },
     fetchUser() {
     },
